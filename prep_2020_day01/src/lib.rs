@@ -30,14 +30,9 @@ pub fn part2 () -> i64 {
 }
 
 pub fn get_puzzle_input() -> Vec<i64> {
-
-    let filename = String::from("input.txt");
-
-    let contents = std::fs::read_to_string(filename)
-        .expect("Failed to open file");
-
-    contents.lines()
-        .map(|line| line.parse().unwrap())
+    std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file")
+        .lines()
+        .map(|line| line.parse().expect("Failed to parse line to i64"))
         .collect()
 }
 
