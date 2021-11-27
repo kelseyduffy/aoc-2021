@@ -1,4 +1,4 @@
-pub fn part1 () -> i64 {
+pub fn part1 () -> Option<i64> {
 
     let nums = get_puzzle_input();
 
@@ -6,14 +6,15 @@ pub fn part1 () -> i64 {
         let remainder = 2020 - num;
 
         if nums.contains(&remainder) {
-            return num * remainder
+            return Some(num * remainder)
         }
     }
-    0
+
+    None 
 }
 
 
-pub fn part2 () -> i64 {
+pub fn part2 () -> Option<i64> {
 
     let nums = get_puzzle_input();
 
@@ -22,11 +23,12 @@ pub fn part2 () -> i64 {
             let remainder = 2020 - num1 - num2;
 
             if nums.contains(&remainder) {
-                return num1 * num2 * remainder
+                return Some(num1 * num2 * remainder)
             }
         }
     }
-    0
+
+    None
 }
 
 pub fn get_puzzle_input() -> Vec<i64> {
@@ -46,7 +48,10 @@ mod tests {
         let rust_answer = part1();
         let python_answer = 751776;
 
-        assert_eq!(rust_answer, python_answer);
+        match rust_answer {
+            Some(x) => assert_eq!(x, python_answer),
+            None => panic!("No value returned for part 1"),
+        }
     }
 
     #[test]
@@ -55,6 +60,9 @@ mod tests {
         let rust_answer = part2();
         let python_answer = 42275090;
 
-        assert_eq!(rust_answer, python_answer);
+        match rust_answer {
+            Some(x) => assert_eq!(x, python_answer),
+            None => panic!("No value returned for part 2"),
+        }
     }
 }
