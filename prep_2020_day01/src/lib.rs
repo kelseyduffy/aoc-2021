@@ -36,16 +36,9 @@ pub fn get_puzzle_input() -> Vec<i64> {
     let contents = std::fs::read_to_string(filename)
         .expect("Failed to open file");
 
-    let mut nums: Vec<i64> = Vec::new();
-
-    for line in contents.lines() {
-
-        nums.push(line.parse().unwrap())
-  
-    }
-
-    nums
-
+    contents.lines()
+        .map(|line| line.parse().unwrap())
+        .collect()
 }
 
 #[cfg(test)]
