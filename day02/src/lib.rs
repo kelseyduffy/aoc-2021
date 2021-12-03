@@ -19,9 +19,10 @@ pub fn part1 () -> Option<i64> {
 
     for op in ops {
         match op {
-            Operation::Down(x) => depth += x,
-            Operation::Forward(x) => horizontal += x,
-            Operation::Up(x) => depth -= x,
+            Some(Operation::Down(x)) => depth += x,
+            Some(Operation::Forward(x)) => horizontal += x,
+            Some(Operation::Up(x)) => depth -= x,
+            None => (),
         };
     }
 
@@ -43,42 +44,40 @@ pub fn part2 () -> Option<i64> {
 
     for op in ops {
         match op {
-            Operation::Down(x) => aim += x,
-            Operation::Forward(x) => {
+            Some(Operation::Down(x)) => aim += x,
+            Some(Operation::Forward(x)) => {
                 horizontal += x;
                 depth += x * aim
             }
-            Operation::Up(x) => aim -= x,
+            Some(Operation::Up(x)) => aim -= x,
+            None => (),
         };
     }
 
     Some((depth * horizontal).into())
 }
 
-pub fn get_puzzle_input() -> Result<Vec<Operation>,Error> {
-    //std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file")
-    //    .lines()
-    //    .map(|line| line.split(' '))
-    //    .collect()
+pub fn get_puzzle_input() -> Result<Vec<Option<Operation>>,Error> {
+    
+    Ok(std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file")
+        .lines()
+        .map(|line| parse_line_to_operation(line))
+        .collect())
 
-    let input = std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file");
-    let mut ops: Vec<Operation> = Vec::new();
+}
 
-    for line in input.lines() {
-        let parts: Vec<&str> = line.split(' ').collect();
+fn parse_line_to_operation(line: &str) -> Option<Operation> {
+    let parts: Vec<&str> = line.split(' ').collect();
 
-        let x: i32 = parts[1].parse().expect("Failed to parse movement amount");
-        let dir: &str = &parts[0][..];
+    let x: i32 = parts[1].parse().expect("Failed to parse movement amount");
+    let dir: &str = &parts[0][..];
 
-        match dir {
-            "up" => ops.push(Operation::Up(x)),
-            "down" => ops.push(Operation::Down(x)),
-            "forward" => ops.push(Operation::Forward(x)),
-            _ => (),
-        }
+    match dir {
+        "up" => Some(Operation::Up(x)),
+        "down" => Some(Operation::Down(x)),
+        "forward" => Some(Operation::Forward(x)),
+        _ => None,
     }
-
-    Ok(ops)
 }
 
 #[cfg(test)]
