@@ -10,3 +10,8 @@ for i, item in enumerate(items):
     print(f'index: {i}')
     print(f'item: {item}')
 ```
+
+### convert a csv line of ints into a list of ints
+``` python
+nums = [int(num) for num in open(file_name).read().strip().split(',')]
+```
