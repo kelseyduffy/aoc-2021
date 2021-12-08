@@ -102,13 +102,14 @@ for input in inputs:
     d = adg - ag                # find d
     b = bd - d                  # find b
 
-    for entry in fivers:
+    """for entry in fivers:
         if e in entry:
             acdeg = entry
             break
     
     c = acdeg - a - d - e - g
     f = cf - c
+    """
 
     this_out_string = ''
     for out_piece in second.strip().split(' '):
@@ -128,17 +129,17 @@ for input in inputs:
             this_set = {x for x in item}
             if e in this_set:           # a cde g
                 this_out_string += '2'
-            elif c in this_set:         # a cd fg
-                this_out_string += '3'
-            else:                       # ab d fg
+            elif b in this_set:         # ab d fg
                 this_out_string += '5'
+            else:                       # a cd fg
+                this_out_string += '3'
             
 
         elif len(item) == 6:
             this_set = {x for x in item}
             if d not in this_set:       # abc efg
                 this_out_string += '0'
-            elif c not in this_set:     # ab defg
+            elif e in this_set:         # ab defg
                 this_out_string += '6'
             else:                       # abcd fg
                 this_out_string += '9'
