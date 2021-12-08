@@ -22,3 +22,21 @@ jobs:
     - name: Run tests day01
       working-directory: ./day01
       run: cargo test --verbose
+    - name: Build day02
+      working-directory: ./day02
+      run: cargo build --verbose
+    - name: Run tests day02
+      working-directory: ./day02
+      run: cargo test --verbose
+    - name: Build day05
+      working-directory: ./day05
+      run: cargo build --verbose
+    - name: Run tests day05
+      working-directory: ./day05
+      run: cargo test --verbose
+    - name: Build day06
+      working-directory: ./day06
+      run: cargo build --verbose
+    - name: Run tests day06
+      working-directory: ./day06
+      run: cargo test --verbose
