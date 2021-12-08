@@ -1,100 +1,91 @@
-inputs = []
+lines = []
 
 with open('python\\08.in','r') as f:
     for x in f.readlines():
-        #inputs.append(int(x.strip()))
-        inputs.append(x.strip())
+        lines.append(x.strip())
 
 ## part 1 ##
-"""
-seconds = []
-counts = [0,0,0,0] # 1, 4, 7, 8, = 2, 4, 3, 7 letters resp.
 
+total_1748s = 0
 
-for input in inputs:
-    first, second = input.split(' | ')
+for line in lines:
+    input, output = line.split(' | ')
     
-    items = second.strip().split(' ')
-    for item in items:
-        if len(item) == 2:
-            counts[0] += 1
-        elif len(item) == 4:
-            counts[1] += 1
-        elif len(item) == 3:
-            counts[2] += 1
-        elif len(item) == 7:
-            counts[3] += 1
+    out_digits = output.strip().split(' ')
+    for out_digit in out_digits:
+        if len(out_digit) in [2, 3, 4, 7]:
+            total_1748s += 1
 
+print(total_1748s)
 
-print(sum(counts))
-"""
 ## part 2 ##
 
-nums = [{'a','b','c','e','f','g'},      # 0     abc efg
-        {'c','f'},                      # 1       c  f
-        {'a','c','d','e','g'},          # 2     a cde g      <- this is the only one without an 'f'
-        {'a','c','d','f','g'},          # 3     a cd fg
-        {'b','c','d','f'},              # 4      bcd f
-        {'a','b','d','f','g'},          # 5     ab d fg
-        {'a','b','d','e','f','g'},      # 6     ab defg
-        {'a','c','f'},                  # 7     a c  f
-        {'a','b','c','d','e','f','g'},  # 8     abcdefg
-        {'a','b','c','d','f','g'}]      # 9     abcd fg
+# 0     abc efg
+# 1       c  f
+# 2     a cde g      <- this is the only one without an 'f'
+# 3     a cd fg
+# 4      bcd f
+# 5     ab d fg
+# 6     ab defg
+# 7     a c  f
+# 8     abcdefg
+# 9     abcd fg
 
 total = 0
+all_letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g'}
 
-for input in inputs:
-    first, second = input.split(' | ')
+for line in lines:
+    input, output = line.split(' | ')
     
-    all_items = first.strip().split(' ') + second.strip().split(' ')
-    #items = second.strip().split(' ')
+    in_digits = input.strip().split(' ')
+    out_digits = output.strip().split(' ')
+    
     sixers = []
     fivers = []
 
-    for item in all_items:
+    for in_digit in in_digits:
         
-        if len(item) == 2:
-            cf = {x for x in item}
+        if len(in_digit) == 2:
+            cf = {x for x in in_digit}
             
-        elif len(item) == 4:
-            bcdf = {x for x in item}
+        elif len(in_digit) == 4:
+            bcdf = {x for x in in_digit}
             
-        elif len(item) == 3:
-            acf = {x for x in item}
+        elif len(in_digit) == 3:
+            acf = {x for x in in_digit}
             
-        elif len(item) == 7:
-            abcdefg = {x for x in item}
+        elif len(in_digit) == 7:
+            abcdefg = {x for x in in_digit}
 
-        elif len(item) == 5:
+        elif len(in_digit) == 5:
             # they all have a, d, g
             # a cde g
             # a cd fg
             # ab d fg
-            fivers.append({x for x in item})
+            fivers.append({x for x in in_digit})
 
-        elif len(item) == 6:
+        elif len(in_digit) == 6:
             # they all have a, b, f, g
             # abc efg
             # ab defg
             # abcd fg
-            sixers.append({x for x in item})
+            sixers.append({x for x in in_digit})
     
-    # a and g are in every 5er and 6er, so union all the sets to reduce down to them
-    ag = abcdefg 
+    # a and g are in every fiver and sixer, so union all the sets to reduce down to them
+    ag = all_letters 
     for entry in (fivers + sixers):
         ag = ag & entry
 
-    # a d and g are in every 5er
-    adg = abcdefg
+    # a d and g are in every fiver
+    adg = all_letters
     for entry in fivers:
         adg = adg & entry
 
-    abfg = abcdefg
+    # a b f and g are in every sixer
+    abfg = all_letters
     for entry in sixers:
         abfg = abfg & entry
     
-    
-
     a = acf - cf                # find the a character
     bd = bcdf - cf              # these two are the b and d, in some order
     eg = abcdefg - bcdf - a     # these two are the e and g, in some order
@@ -103,51 +94,44 @@ for input in inputs:
     d = adg - ag                # find d
     b = bd - d                  # find b
 
-    """for entry in fivers:
-        if e in entry:
-            acdeg = entry
-            break
-    
-    c = acdeg - a - d - e - g
-    f = cf - c
-    """
+    out_string = ''
+    for out_digit in out_digits:
 
-    this_out_string = ''
-    for out_piece in second.strip().split(' '):
-        if len(out_piece) == 2:
-            this_out_string += '1'
-            
-        elif len(out_piece) == 4:
-            this_out_string += '4'
-            
-        elif len(out_piece) == 3:
-            this_out_string += '7'
-            
-        elif len(out_piece) == 7:
-            this_out_string += '8'
+        this_digit = ''
 
-        elif len(out_piece) == 5:
-            this_set = {x for x in out_piece}
+        if len(out_digit) == 2:
+            this_digit = '1'
+            
+        elif len(out_digit) == 4:
+            this_digit = '4'
+            
+        elif len(out_digit) == 3:
+            this_digit = '7'
+            
+        elif len(out_digit) == 7:
+            this_digit = '8'
+
+        elif len(out_digit) == 5:
+            this_set = {x for x in out_digit}
             if e.issubset(this_set):           # a cde g
-                this_out_string += '2'
+                this_digit = '2'
             elif b.issubset(this_set):         # ab d fg
-                this_out_string += '5'
-            else:                       # a cd fg
-                this_out_string += '3'
+                this_digit = '5'
+            else:                              # a cd fg
+                this_digit = '3'
             
 
-        elif len(out_piece) == 6:
-            this_set = {x for x in out_piece}
+        elif len(out_digit) == 6:
+            this_set = {x for x in out_digit}
             if not d.issubset(this_set):       # abc efg
-                this_out_string += '0'
+                this_digit = '0'
             elif e.issubset(this_set):         # ab defg
-                this_out_string += '6'
-            else:                       # abcd fg
-                this_out_string += '9'
+                this_digit = '6'
+            else:                              # abcd fg
+                this_digit = '9'
+
+        out_string += this_digit
     
-    total += int(this_out_string)
-            
-            
-print(total)
-            
-            
+    total += int(out_string)
+                  
+print(total)            
