@@ -16,10 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-          path: |
-            ../aoc-2021/day01/
-    - name: Build
+    - name: Build day01
+      working-directory: ./day01
       run: cargo build --verbose
-    - name: Run tests
+    - name: Run tests day01
+      working-directory: ./day01
       run: cargo test --verbose
