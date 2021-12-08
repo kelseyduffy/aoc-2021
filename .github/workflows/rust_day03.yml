@@ -17,8 +17,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build day03
-      working-directory: ./day03
+      working-directory: ./rust/day03
       run: cargo build --verbose
     - name: Run tests day03
-      working-directory: ./day03
+      working-directory: ./rust/day03
       run: cargo test --verbose
