@@ -6,7 +6,7 @@ with open('python\\08.in','r') as f:
         inputs.append(x.strip())
 
 ## part 1 ##
-
+"""
 seconds = []
 counts = [0,0,0,0] # 1, 4, 7, 8, = 2, 4, 3, 7 letters resp.
 
@@ -27,7 +27,7 @@ for input in inputs:
 
 
 print(sum(counts))
-
+"""
 ## part 2 ##
 
 nums = [{'a','b','c','e','f','g'},      # 0     abc efg
@@ -48,10 +48,11 @@ for input in inputs:
     
     all_items = first.strip().split(' ') + second.strip().split(' ')
     #items = second.strip().split(' ')
+    sixers = []
+    fivers = []
 
     for item in all_items:
-        sixers = []
-        fivers = []
+        
         if len(item) == 2:
             cf = {x for x in item}
             
@@ -113,33 +114,33 @@ for input in inputs:
 
     this_out_string = ''
     for out_piece in second.strip().split(' '):
-        if len(item) == 2:
+        if len(out_piece) == 2:
             this_out_string += '1'
             
-        elif len(item) == 4:
+        elif len(out_piece) == 4:
             this_out_string += '4'
             
-        elif len(item) == 3:
+        elif len(out_piece) == 3:
             this_out_string += '7'
             
-        elif len(item) == 7:
+        elif len(out_piece) == 7:
             this_out_string += '8'
 
-        elif len(item) == 5:
-            this_set = {x for x in item}
-            if e in this_set:           # a cde g
+        elif len(out_piece) == 5:
+            this_set = {x for x in out_piece}
+            if e.issubset(this_set):           # a cde g
                 this_out_string += '2'
-            elif b in this_set:         # ab d fg
+            elif b.issubset(this_set):         # ab d fg
                 this_out_string += '5'
             else:                       # a cd fg
                 this_out_string += '3'
             
 
-        elif len(item) == 6:
-            this_set = {x for x in item}
-            if d not in this_set:       # abc efg
+        elif len(out_piece) == 6:
+            this_set = {x for x in out_piece}
+            if not d.issubset(this_set):       # abc efg
                 this_out_string += '0'
-            elif e in this_set:         # ab defg
+            elif e.issubset(this_set):         # ab defg
                 this_out_string += '6'
             else:                       # abcd fg
                 this_out_string += '9'
