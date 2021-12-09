@@ -31,6 +31,7 @@ impl Point {
 
 impl Line {
     pub fn new(input: &str) -> Line {
+        eprintln!("Making new line from {}", input);
         let parts: Vec<&str> = input.split(" -> ").collect();
         
         let start = Point::new(parts[0]);
@@ -66,6 +67,8 @@ pub fn part2() -> Option<i32> {
 }
 
 fn get_puzzle_input() -> Result<Vec<Line>, Error> {
+    eprintln!("Getting puzzle input");
+
     Ok(std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file")
         .lines()
         .map(|line| Line::new(line))
@@ -80,37 +83,36 @@ fn process_lines(lines: Vec<Line>, use_diags: bool) -> Option<i32> {
         return None
     }
 
+    eprintln!("number of lines is {}", lines.len());
+
     // let mut max_val = 0;
     // for line in lines {
     //    max_val = cmp::max(max_val, Line::max_value( &line));
     //}    
 
-    let mut counts = [0; (MAX_VALUE + 1) * (MAX_VALUE) + 1];
-
+    let mut counts = [0; (MAX_VALUE + 1) * (MAX_VALUE + 1)];
+    
     for line in lines {
         match line.style {
             Direction::Horizontal(mx) => {
 
-                let diff: i32 = (line.start.x - line.end.x).try_into().unwrap();
+                let diff: i32 = (line.start.x as i32 - line.end.x as i32).try_into().unwrap();
                 let y_offset: usize = MAX_VALUE * line.start.y as usize;
                 for i in 0..(diff.abs() + 1) {
-                    counts[(i * mx) as usize + line.start.x as usize + y_offset] += 1;
+                    counts[((i as i32 * mx) as i32 + line.start.x as i32) as usize + y_offset] += 1;
                 }
-
             },
             Direction::Vertical(my) => {
 
                 let diff: i32 = (line.start.y - line.end.y).try_into().unwrap();
                 for i in 0..(diff.abs() + 1) {
-                    counts[(((i * my) + line.start.y as i32) * MAX_VALUE as i32) as usize + line.start.x as usize] += 1;
+                    counts[(((i as i32 * my) + line.start.y as i32) * MAX_VALUE as i32) as usize + line.start.x as usize] += 1;
                 }
             },
-            Direction::Diagnol(mx, my) => {
-                if use_diags {
-
-                }
+            Direction::Diagnol(_mx, _my) if use_diags => {
+                
             },
-            Direction::Unknown => (),
+            _ => (),
         };
     }
 
@@ -135,7 +137,7 @@ mod tests {
         }
     }
 
-    #[test]
+    //#[test]
     fn part2_works() {
         let rust_result = part2();
         let python_result= 22037;
