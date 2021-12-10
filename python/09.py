@@ -1,106 +1,27 @@
 nums = []
 
-def move_right(i, j, nums, basin, current_basin):
+def process(i, j, nums, basin, current_basin):
 
-    # keep moving up until you hit a wall or a 9
-    j += 1
-    if j >= len(nums[0]):
-        # hit a wall
-        return
+    # check that you're within the bounds before attempting to access any elements
+    if 0 <= j < len(nums[0]) and 0 <= i < len(nums):
+        
+        # check if you've been here before
+        if basin[i][j] != 0:
+            return
 
-    elif basin[i][j] != 0:
-        # you've been here before
-        return
+        # check if the current position is a basin wall
+        if nums[i][j] == 9:
+            basin[i][j] = -1
+            return
 
-    elif nums[i][j] == 9:
-        # hit a 9, set it in basin and stop moving to the right
-        basin[i][j] = -1
-        return
+        # you're still in the basin, set the value to the current basin 
+        basin[i][j] = current_basin
 
-    # you're still in the basin, set the value to the current basin 
-    basin[i][j] = current_basin
-
-    # start moving up, left, then down from here
-    move_right(i, j, nums, basin, current_basin)
-    move_up(i, j, nums, basin, current_basin)
-    move_left(i, j, nums, basin, current_basin)
-    move_down(i, j, nums, basin, current_basin)
-
-            
-def move_up(i, j, nums, basin, current_basin):
-
-    # keep moving up until you hit a wall or a 9
-    i -= 1
-    if i < 0:
-        # hit a wall
-        return
-
-    if basin[i][j] != 0:
-        # you've been here before
-        return
-
-    if nums[i][j] == 9:
-        # hit a 9, set it in basin and stop moving to the right
-        basin[i][j] = -1
-        return
-
-    # you're still in the basin, set the value to the current basin 
-    basin[i][j] = current_basin
-
-    # start moving left then down from here
-    move_right(i, j, nums, basin, current_basin)
-    move_up(i, j, nums, basin, current_basin)
-    move_left(i, j, nums, basin, current_basin)
-    move_down(i, j, nums, basin, current_basin)
-
-
-def move_left(i, j, nums, basin, current_basin):
-
-    j -= 1
-    if j < 0:
-        # hit a wall
-        return
-
-    if basin[i][j] != 0:
-        # you've been here before
-        return
-
-    if nums[i][j] == 9:
-        # hit a 9, set it in basin and stop moving to the right
-        basin[i][j] = -1
-        return
-
-    basin[i][j] = current_basin
-
-    move_right(i, j, nums, basin, current_basin)
-    move_up(i, j, nums, basin, current_basin)
-    move_left(i, j, nums, basin, current_basin)
-    move_down(i, j, nums, basin, current_basin)
-
-
-def move_down(i, j, nums, basin, current_basin):
-
-    # keep moving up until you hit a wall or a 9
-    i += 1
-    if i >= len(nums):
-        # hit a wall
-        return
-
-    if basin[i][j] != 0:
-        # you've been here before
-        return
-
-    if nums[i][j] == 9:
-        # hit a 9, set it in basin and stop moving to the right
-        basin[i][j] = -1
-        return
-    
-    basin[i][j] = current_basin
-
-    move_right(i, j, nums, basin, current_basin)
-    move_up(i, j, nums, basin, current_basin)
-    move_left(i, j, nums, basin, current_basin)
-    move_down(i, j, nums, basin, current_basin) 
+        # process all of this position's neighbors
+        process(i, j+1, nums, basin, current_basin)
+        process(i-1, j, nums, basin, current_basin)
+        process(i, j-1, nums, basin, current_basin)
+        process(i+1, j, nums, basin, current_basin)
 
 
 with open('python\\09.in','r') as f:
@@ -148,10 +69,10 @@ for i in range(len(nums)):
                 basin[i][j] = current_basin
 
                 # then recursively map the entire basin
-                move_right(i, j, nums, basin, current_basin)
-                move_up(i, j, nums, basin, current_basin)
-                move_left(i, j, nums, basin, current_basin)
-                move_down(i, j, nums, basin, current_basin)
+                process(i, j+1, nums, basin, current_basin)
+                process(i-1, j, nums, basin, current_basin)
+                process(i, j-1, nums, basin, current_basin)
+                process(i+1, j, nums, basin, current_basin)
 
 
 basin_counts = [0] * (current_basin + 1)
