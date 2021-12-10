@@ -2,109 +2,105 @@ nums = []
 
 def move_right(i, j, nums, basin, current_basin):
 
-    while(True):
-        # keep moving up until you hit a wall or a 9
-        j += 1
-        if j >= len(nums[0]):
-            # hit a wall
-            break
+    # keep moving up until you hit a wall or a 9
+    j += 1
+    if j >= len(nums[0]):
+        # hit a wall
+        return
 
-        elif basin[i][j] != 0:
-            # you've been here before
-            break
+    elif basin[i][j] != 0:
+        # you've been here before
+        return
 
-        elif nums[i][j] == 9:
-            # hit a 9, set it in basin and stop moving to the right
-            basin[i][j] = -1
-            break
+    elif nums[i][j] == 9:
+        # hit a 9, set it in basin and stop moving to the right
+        basin[i][j] = -1
+        return
 
-        # you're still in the basin, set the value to the current basin 
-        basin[i][j] = current_basin
+    # you're still in the basin, set the value to the current basin 
+    basin[i][j] = current_basin
 
-        # start moving up, left, then down from here
-        move_up(i, j, nums, basin, current_basin)
-        move_left(i, j, nums, basin, current_basin)
-        move_down(i, j, nums, basin, current_basin)
+    # start moving up, left, then down from here
+    move_right(i, j, nums, basin, current_basin)
+    move_up(i, j, nums, basin, current_basin)
+    move_left(i, j, nums, basin, current_basin)
+    move_down(i, j, nums, basin, current_basin)
+
             
 def move_up(i, j, nums, basin, current_basin):
 
-    while(True):
-        # keep moving up until you hit a wall or a 9
-        i -= 1
-        if i < 0:
-            # hit a wall
-            break
+    # keep moving up until you hit a wall or a 9
+    i -= 1
+    if i < 0:
+        # hit a wall
+        return
 
-        
-        
-        if basin[i][j] != 0:
-            # you've been here before
-            break
+    if basin[i][j] != 0:
+        # you've been here before
+        return
 
-        if nums[i][j] == 9:
-            # hit a 9, set it in basin and stop moving to the right
-            basin[i][j] = -1
-            break
+    if nums[i][j] == 9:
+        # hit a 9, set it in basin and stop moving to the right
+        basin[i][j] = -1
+        return
 
-        move_right(i, j, nums, basin, current_basin)
+    # you're still in the basin, set the value to the current basin 
+    basin[i][j] = current_basin
 
-        # you're still in the basin, set the value to the current basin 
-        basin[i][j] = current_basin
+    # start moving left then down from here
+    move_right(i, j, nums, basin, current_basin)
+    move_up(i, j, nums, basin, current_basin)
+    move_left(i, j, nums, basin, current_basin)
+    move_down(i, j, nums, basin, current_basin)
 
-        # start moving left then down from here
-        move_left(i, j, nums, basin, current_basin)
-        move_down(i, j, nums, basin, current_basin)
 
 def move_left(i, j, nums, basin, current_basin):
 
-    while(True):
-        # keep moving up until you hit a wall or a 9
-        j -= 1
-        if j < 0:
-            # hit a wall
-            break
+    j -= 1
+    if j < 0:
+        # hit a wall
+        return
 
-        if basin[i][j] != 0:
-            # you've been here before
-            break
+    if basin[i][j] != 0:
+        # you've been here before
+        return
 
-        if nums[i][j] == 9:
-            # hit a 9, set it in basin and stop moving to the right
-            basin[i][j] = -1
-            break
+    if nums[i][j] == 9:
+        # hit a 9, set it in basin and stop moving to the right
+        basin[i][j] = -1
+        return
 
-        move_right(i, j, nums, basin, current_basin)
-        move_up(i, j, nums, basin, current_basin)
+    basin[i][j] = current_basin
 
-        # you're still in the basin, set the value to the current basin 
-        basin[i][j] = current_basin
+    move_right(i, j, nums, basin, current_basin)
+    move_up(i, j, nums, basin, current_basin)
+    move_left(i, j, nums, basin, current_basin)
+    move_down(i, j, nums, basin, current_basin)
 
-        # start moving down from here
-        move_down(i, j, nums, basin, current_basin)
 
 def move_down(i, j, nums, basin, current_basin):
 
-    while(True):
-        # keep moving up until you hit a wall or a 9
-        i += 1
-        if i >= len(nums):
-            # hit a wall
-            break
+    # keep moving up until you hit a wall or a 9
+    i += 1
+    if i >= len(nums):
+        # hit a wall
+        return
 
-        if basin[i][j] != 0:
-            # you've been here before
-            break
+    if basin[i][j] != 0:
+        # you've been here before
+        return
 
-        if nums[i][j] == 9:
-            # hit a 9, set it in basin and stop moving to the right
-            basin[i][j] = -1
-            break
-        
-        move_right(i, j, nums, basin, current_basin)
-        move_up(i, j, nums, basin, current_basin)
-        move_left(i, j, nums, basin, current_basin)
-        # you're still in the basin, set the value to the current basin 
-        basin[i][j] = current_basin
+    if nums[i][j] == 9:
+        # hit a 9, set it in basin and stop moving to the right
+        basin[i][j] = -1
+        return
+    
+    basin[i][j] = current_basin
+
+    move_right(i, j, nums, basin, current_basin)
+    move_up(i, j, nums, basin, current_basin)
+    move_left(i, j, nums, basin, current_basin)
+    move_down(i, j, nums, basin, current_basin) 
 
 
 with open('python\\09.in','r') as f:
