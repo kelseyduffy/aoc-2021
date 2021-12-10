@@ -1,7 +1,8 @@
 nums = []
 
-def process(i, j, nums, basin, current_basin):
+def process(tup, nums, basin, current_basin):
 
+    (i, j) = tup
     # check that you're within the bounds before attempting to access any elements
     if 0 <= j < len(nums[0]) and 0 <= i < len(nums):
         
@@ -18,10 +19,8 @@ def process(i, j, nums, basin, current_basin):
         basin[i][j] = current_basin
 
         # process all of this position's neighbors
-        process(i, j+1, nums, basin, current_basin)
-        process(i-1, j, nums, basin, current_basin)
-        process(i, j-1, nums, basin, current_basin)
-        process(i+1, j, nums, basin, current_basin)
+        neighbors = [(i, j+1), (i-1, j), (i, j-1), (i+1, j)]
+        [process(neighbor, nums, basin, current_basin) for neighbor in neighbors]
 
 
 with open('python\\09.in','r') as f:
@@ -69,10 +68,8 @@ for i in range(len(nums)):
                 basin[i][j] = current_basin
 
                 # then recursively map the entire basin
-                process(i, j+1, nums, basin, current_basin)
-                process(i-1, j, nums, basin, current_basin)
-                process(i, j-1, nums, basin, current_basin)
-                process(i+1, j, nums, basin, current_basin)
+                neighbors = [(i, j+1), (i-1, j), (i, j-1), (i+1, j)]
+                [process(neighbor, nums, basin, current_basin) for neighbor in neighbors]
 
 
 basin_counts = [0] * (current_basin + 1)
