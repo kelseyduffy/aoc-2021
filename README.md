@@ -6,7 +6,7 @@ Rust for learning
 
 | Day | Part 1 | Part 2 | Rust | Day | Part 1 | Part 2 | Rust |
 |:---:|---:|---:|:---|:---:|---:|---:|:---|
-|01|1351|2583|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|14|--|--|--|
+|01|1351|2583|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|14|4874|--|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day14.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day14.yml)|
 |02|__292__|1320|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml)|15|--|--|--|
 |03|55599|49244|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day03.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day03.yml)|16|--|--|--|
 |04|1665|2280|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day04.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day04.yml)|17|--|--|--|
