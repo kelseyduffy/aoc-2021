@@ -68,21 +68,15 @@ pub fn score_line(line: Vec<char>) -> Option<Fault> {
             current_stack.push(this_char);
         }
         else {
-            let popped_char = match current_stack.pop() {
-                Some(x) => x,
-                _ => return None,
-            };
-            let expected_char = match expected_closing_chars.get(&popped_char) {
-                Some(x) => x,
-                _ => return None,
-            };
-            if this_char != *expected_char {
-                let score = match char_scores.get(&this_char) {
-                    Some(x) => x,
-                    _ => return None,
+            if let Some(popped_char) = current_stack.pop() {
+                if let Some(expected_char) = expected_closing_chars.get(&popped_char) {
+                    if this_char != *expected_char {
+                        if let Some(score) = char_scores.get(&this_char) {
+                            return Some(Fault::Corrupt(*score))
+                        };
+                    }
                 };
-                return Some(Fault::Corrupt(*score))
-            }
+            };  
         }
     }
 
@@ -93,16 +87,13 @@ pub fn score_line(line: Vec<char>) -> Option<Fault> {
     let mut stack_empty = false;
 
     while !stack_empty {
-        match current_stack.pop() {
-            Some(x) => {
-                let this_score = match char_scores.get(&x) {
-                    Some(y) => y,
-                    _ => return None,
-                };
+        if let Some(popped_char) = current_stack.pop() {
+            if let Some(this_score) = char_scores.get(&popped_char) {
                 score *= 5;
                 score += this_score;
-            },
-            _ => stack_empty = true,
+            };
+        } else {
+            stack_empty = true;
         };
     }
 
