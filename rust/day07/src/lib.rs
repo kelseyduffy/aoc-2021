@@ -44,7 +44,13 @@ pub fn count_movements(crabs: Vec<u32>, iterative_sum: bool) -> Option<u32> {
     for attack_position in *min_crab as usize..*&((max_crab + 1)) as usize {
         let fuel = crabs
             .iter()
-            .map(|crab| {(*crab as i32 - attack_position as i32).abs() as u32})
+            .map(|crab| {
+                let diff = (*crab as i32 - attack_position as i32).abs() as u32;
+                if iterative_sum {
+                    (0..(diff + 1)).fold(0, |a, b| a + b)
+                } else {
+                    diff
+                }})
             .sum();
         
         min_fuel = if fuel < min_fuel {fuel} else {min_fuel};
