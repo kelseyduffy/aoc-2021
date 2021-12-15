@@ -1,3 +1,21 @@
+import sys
+
+def find_path(scores, loops):
+    R = len(scores)
+    C = len(scores[0])
+
+    max_possible_val = 9 * loops * (R + C) + 1
+
+    min_scores_to_here = [([max_possible_val] * C * loops) for _ in range(R * loops)]
+
+    min_scores_to_here[0][0] = 0
+
+    walk(1, 0, R, C, scores, min_scores_to_here, 0, loops=loops)
+    walk(0, 1, R, C, scores, min_scores_to_here, 0, loops=loops)
+
+    return min_scores_to_here[-1][-1]
+
+
 def walk(x, y, R, C, scores, min_scores_to_here, current_score, loops=1):
     
     this_score = scores[x%R][y%C] + x//R + y//C
@@ -18,6 +36,7 @@ def walk(x, y, R, C, scores, min_scores_to_here, current_score, loops=1):
     if y < loops * len(scores[0]) - 1:
         walk(x, y+1, R, C, scores, min_scores_to_here, current_score, loops)
     
+    """ this is safer but causes recursion limit to be hit, and answer is almost correct
     #walk up
     if x > 1:
         walk(x-1, y, R, C, scores, min_scores_to_here, current_score, loops)
@@ -25,40 +44,23 @@ def walk(x, y, R, C, scores, min_scores_to_here, current_score, loops=1):
     #walk left
     if y > 1:
         walk(x, y-1, R, C, scores, min_scores_to_here, current_score, loops)
+    """
 
-
+print(sys.getrecursionlimit())
+sys.setrecursionlimit(2000)
 
 scores = []
 
-with open('python\\test.in','r') as f:
+with open('python\\15.in','r') as f:
     for line in f.readlines():
         scores.append([int(x) for x in line.strip()])
 
-R = len(scores)
-C = len(scores[0])
 
 ## part 1 ##
 
-max_possible_val = 9 * (R + C) + 1
-
-min_scores_to_here = [([max_possible_val] * C) for _ in range(R)]
-
-min_scores_to_here[0][0] = 0
-
-walk(1, 0, R, C, scores, min_scores_to_here, 0)
-walk(0, 1, R, C, scores, min_scores_to_here, 0)
-
-print(min_scores_to_here[-1][-1])
+print(find_path(scores, loops = 1))
 
 ## part 2 ##
 
-max_possible_val = 9 * 5 * (R + C) + 1
-
-min_scores_to_here = [([max_possible_val] * C * 5) for _ in range(R * 5)]
-
-min_scores_to_here[0][0] = 0
-
-walk(1, 0, R, C, scores, min_scores_to_here, 0, loops=5)
-walk(0, 1, R, C, scores, min_scores_to_here, 0, loops=5)
-
-print(min_scores_to_here[-1][-1])
+print(find_path(scores, loops = 5))
+# correct answer 2935 from 15.in
