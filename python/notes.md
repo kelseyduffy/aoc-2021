@@ -15,3 +15,8 @@ for i, item in enumerate(items):
 ``` python
 nums = [int(num) for num in open(file_name).read().strip().split(',')]
 ```
+
+### increment a dictionary entry by 1 or set it to 1 if new
+``` python
+this_dict[key] = this_dict.get(key, 0) + 1
+```

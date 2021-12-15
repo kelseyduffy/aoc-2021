@@ -2,7 +2,7 @@ steps = {}
 starting_string = ''
 final_char = ''
 
-with open('python\\14.in','r') as f:
+with open('python/14.in','r') as f:
     for i, line in enumerate(f):
         if i == 0: 
             starting_string = line.strip()
@@ -31,10 +31,7 @@ for _ in range(10):
 
 letter_counts = {}
 for letter in polymer:
-    if letter in letter_counts:
-        letter_counts[letter] += 1
-    else:
-        letter_counts[letter] = 1
+    letter_counts[letter] = letter_counts.get(letter, 0) + 1
 
 max_letter = max(letter_counts, key=letter_counts.get)
 min_letter = min(letter_counts, key=letter_counts.get)
@@ -44,56 +41,30 @@ print(letter_counts[max_letter] - letter_counts[min_letter])
 
 polymer = {}
 for i in range(len(starting_string) - 1):
-    key = starting_string[i:i+2]
     
-    if key not in polymer:
-        polymer[key] = 1
-    else:
-        polymer[key] += 1
+    key = starting_string[i:i+2]
+    polymer[key] = polymer.get(key, 0) + 1
 
 for _ in range(40):
     new_polymer = {}
     
     for key in polymer:
-        value = polymer[key]
 
-        if key not in steps:
-            if key in new_polymer:
-                new_polymer[key] += value
-            else:
-                new_polymer[key] = value
+        key1 = key[0] + steps[key]
+        key2 = steps[key] + key[1]
 
-        else:
-            key1 = key[0] + steps[key]
-            key2 = steps[key] + key[1]
-
-            if key1 in new_polymer:
-                new_polymer[key1] += value
-            else:
-                new_polymer[key1] = value
-
-            if key2 in new_polymer:
-                new_polymer[key2] += value
-            else:
-                new_polymer[key2] = value
+        new_polymer[key1] = new_polymer.get(key1, 0) + polymer[key]
+        new_polymer[key2] = new_polymer.get(key2, 0) + polymer[key]
     
     polymer = new_polymer
 
 letter_counts = {}
 for letter_pair in polymer:
-    value = polymer[letter_pair]
-    
-    if letter_pair[0] in letter_counts:
-        letter_counts[letter_pair[0]] += value
-    else:
-        letter_counts[letter_pair[0]] = value
+    letter_counts[letter_pair[0]] = letter_counts.get(letter_pair[0], 0) + polymer[letter_pair]
 
-if final_char in letter_counts:
-    letter_counts[final_char] += 1
-else:
-    letter_counts[final_char] = 1
+letter_counts[final_char] = letter_counts.get(final_char, 0) + 1
 
 max_letter = max(letter_counts, key=letter_counts.get)
 min_letter = min(letter_counts, key=letter_counts.get)
 
-print(f'{letter_counts[max_letter] - letter_counts[min_letter]}')
+print(letter_counts[max_letter] - letter_counts[min_letter])
