@@ -1,6 +1,6 @@
 lines = []
 
-with open('python\\13.in','r') as f:
+with open('python/13.in','r') as f:
     for x in f.readlines():
         lines.append(x.strip())
 
@@ -52,10 +52,11 @@ for (x,y) in folded_points:
     max_x = max(x, max_x)
     max_y = max(y, max_y)
 
-letters = [([0] * (max_x + 1)) for _ in range(max_y + 1)]
+password = ''
+for y in range(max_y + 1):
+    for x in range(max_x + 1):
+        password += (' ', '#')[(x,y) in folded_points]
+    password += '\n'
 
-for (x,y) in folded_points:
-    letters[y][x] = 1
-
-for row in letters:
-    print(row)
+print()
+print(password)
