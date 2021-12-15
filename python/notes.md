@@ -1,6 +1,6 @@
 ### create a matrix of identical
 ``` python
-mat_zeros = [[0] * col_count] for _ in row_count]
+mat_zeros = [([0] * col_count) for _ in row_count]
 mat_falses = [[False for _ in col_count] for _ in row_count]
 ```
 
@@ -24,4 +24,9 @@ this_dict[key] = this_dict.get(key, 0) + 1
 ### split a string into a list of tuples of (letter, count) ordered by count desc for x most common letters
 ``` python
 letter_counts = collections.Counter(polymer).most_common(x)
+```
+
+### create dictionary from list of lines of 'key -> value'
+``` python
+R = dict(r.strip().split(" -> ") for r in rules.strip().split("\n"))
 ```
