@@ -20,3 +20,8 @@ nums = [int(num) for num in open(file_name).read().strip().split(',')]
 ``` python
 this_dict[key] = this_dict.get(key, 0) + 1
 ```
+
+### split a string into a list of tuples of (letter, count) ordered by count desc for x most common letters
+``` python
+letter_counts = collections.Counter(polymer).most_common(x)
+```

@@ -1,3 +1,5 @@
+import collections
+
 steps = {}
 starting_string = ''
 final_char = ''
@@ -20,22 +22,15 @@ for _ in range(10):
     for i in range(len(polymer) - 1):
 
         new_polymer += polymer[i]
-        key = polymer[i:i+2]
-
-        if key in steps:
-            new_polymer += steps[key]
+        new_polymer += steps[polymer[i:i+2]]
     
     new_polymer += polymer[-1]
 
     polymer = new_polymer
 
-letter_counts = {}
-for letter in polymer:
-    letter_counts[letter] = letter_counts.get(letter, 0) + 1
+letter_counts = collections.Counter(polymer).most_common()
+print(letter_counts[0][1] - letter_counts[-1][1])
 
-max_letter = max(letter_counts, key=letter_counts.get)
-min_letter = min(letter_counts, key=letter_counts.get)
-print(letter_counts[max_letter] - letter_counts[min_letter])
 
 ## part 2 ##
 
