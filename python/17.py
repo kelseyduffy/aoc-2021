@@ -1,37 +1,41 @@
-def check_hit(x_velocity, y_velocity, min_x, max_x, min_y, max_y):
+def check_hit(x_velocity, y_velocity):
     
+    global x_min, x_max, y_min, y_max
+
+    # all shots start at 0,0
     x = 0
     y = 0
 
-    while x <= max_x and y >= min_y:
-        if min_x <= x <= max_x and min_y <= y <= max_y:
+    while x <= x_max and y >= y_min: # while it hasn't yet overshot the target area
+
+        if x_min <= x <= x_max and y_min <= y <= y_max: # if it's in the target area
             return 1
-        else:
+
+        else: # step the x and y, then adjust the x and y velocities
             x += x_velocity
-            y += y_velocity
+            y += y_velocity 
+            
+            y_velocity -= 1
             if x_velocity > 0:
                 x_velocity -= 1
-            elif x_velocity < 0:
-                x_velocity += 1
-            y_velocity -= 1
-    
-    return 0
+
+    return 0 # if it missed the target area
 
 
 with open('python\\17.in','r') as f:
     target_area = f.readlines()[0].strip().replace('target area: ','')
 
-ranges = target_area.split(',')
-x_range = ranges[0].strip().replace('x=','')
-y_range = ranges[1].strip().replace('y=','')
+x_range, y_range = target_area.split(',')
+x_range = x_range.strip().replace('x=','')
+y_range = y_range.strip().replace('y=','')
 
-xes = x_range.split('..')
-yes = y_range.split('..')
+x_min, x_max = x_range.split('..')
+y_min, y_max = y_range.split('..')
 
-x_min = int(xes[0])
-x_max = int(xes[1])
-y_min = int(yes[0])
-y_max = int(yes[1])
+x_min = int(x_min)
+x_max = int(x_max)
+y_min = int(y_min)
+y_max = int(y_max)
 
 ## part 1 ##
  
@@ -40,20 +44,10 @@ print(sum(range(-y_min)))
 ## part 2 ##
 
 x_lower = 0
-while(True):
+total = 0
+while(total < x_min): # find the lowest x that reaches the beginning of the target area before stalling out
     x_lower += 1
-    if sum(range(x_lower)) >= x_min:
-        break
+    total += x_lower
 
-total_hits = 0
-
-for x in range(x_lower - 1, x_max + 1):
-    for y in range(y_min, -y_min + 1):
-        total_hits += check_hit(x, y, x_min, x_max, y_min, y_max)
-
-print(total_hits)
-# try each pair within range of boundaries
-# x upper -> x outer boundary (get it in 1)
-# x lower -> x where sum(range(x)) = x inner boundary (guarantee that it can get to the start of the boundary)
-# y upper -> -y_min (answer to part 1)
-# y lower -> y outer boundary (get it in 1)
+# iterate across all possible x's and y's, summing up the results
+print(sum([check_hit(x, y) for x in range(x_lower, x_max + 1) for y in range(y_min, -y_min + 1)]))
