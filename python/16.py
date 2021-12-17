@@ -1,4 +1,6 @@
-def parse_packet(i, instruction, version_total):
+def parse_packet():
+
+    global i, version_total, instruction
 
     version_total += int(instruction[i:i+3], 2)
     i += 3
@@ -19,7 +21,7 @@ def parse_packet(i, instruction, version_total):
             if keep_going == '0':
                 break
 
-        value = int(this_num_str, 2)
+        return int(this_num_str, 2)
 
     else:
         length_type_id = instruction[i]
@@ -35,7 +37,7 @@ def parse_packet(i, instruction, version_total):
             # keep parsing out the next bits until you hit the limit
             stopping_point = i + num_sub_packet_bits
             while(i < stopping_point):
-                i, version_total, this_value = parse_packet(i, instruction, version_total)
+                this_value = parse_packet()
                 values.append(this_value)
 
         else:
@@ -44,36 +46,33 @@ def parse_packet(i, instruction, version_total):
             i += 11
 
             for _ in range(num_sub_packets):
-                i, version_total, this_value = parse_packet(i, instruction, version_total)
+                this_value = parse_packet()
                 values.append(this_value)
         
         if type_id == '000':
-            value = sum(values)
+            return sum(values)
 
         elif type_id == '001':
             value = 1
             for this_value in values:
                 value *= this_value
+            return value
 
         elif type_id == '010':
-            value = min(values)
+            return min(values)
 
         elif type_id == '011':
-            value = max(values)
+            return max(values)
 
         elif type_id == '101':
-            value = values[0] > values[1]
+            return values[0] > values[1]
 
         elif type_id == '110':
-            value = values[0] < values[1]
-            pass
+            return values[0] < values[1]
 
         elif type_id == '111':
-            value = values[0] == values[1]
-            pass
+            return values[0] == values[1]
     
-    return i, version_total, value
-
 
 with open('python\\16.in','r') as f:
     hex_string = f.readlines()[0].strip()
@@ -83,7 +82,10 @@ instruction = bin(int(hex_string, 16))[2:] # doesn't contain leading zeros for t
 leading_zeros = '0' * (len(hex_string) * 4 - len(instruction))
 instruction = leading_zeros + instruction
 
-i, version_total, value = parse_packet(0, instruction, 0)
+i = 0
+version_total = 0
+
+value = parse_packet()
     
 ## part 1 ##
 
