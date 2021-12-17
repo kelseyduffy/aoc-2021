@@ -1,66 +1,89 @@
-import sys
+from collections import deque
+import bisect
 
-def find_path(scores, loops):
-    R = len(scores)
-    C = len(scores[0])
+class Node:
+    def __init__(self, x, y, score):
+        self.x = x
+        self.y = y
+        self.score = score
 
-    max_possible_val = 9 * loops * (R + C) + 1
+    def __lt__(self, other):
+        return self.score < other.score
 
-    min_scores_to_here = [([max_possible_val] * C * loops) for _ in range(R * loops)]
-
-    min_scores_to_here[0][0] = 0
-
-    walk(1, 0, R, C, scores, min_scores_to_here, 0, loops=loops)
-    walk(0, 1, R, C, scores, min_scores_to_here, 0, loops=loops)
-
-    return min_scores_to_here[-1][-1]
-
-
-def walk(x, y, R, C, scores, min_scores_to_here, current_score, loops=1):
-    
-    this_score = scores[x%R][y%C] + x//R + y//C
-    this_score = ((this_score - 1) % 9) + 1
-
-    current_score += this_score
-
-    if current_score >= min_scores_to_here[x][y]:
-        return
-    
-    min_scores_to_here[x][y] = current_score
-
-    #walk down
-    if x < loops * len(scores) - 1:
-        walk(x+1, y, R, C, scores, min_scores_to_here, current_score, loops)
-    
-    #walk right
-    if y < loops * len(scores[0]) - 1:
-        walk(x, y+1, R, C, scores, min_scores_to_here, current_score, loops)
-    
-    """ this is safer but causes recursion limit to be hit, and answer is almost correct
-    #walk up
-    if x > 1:
-        walk(x-1, y, R, C, scores, min_scores_to_here, current_score, loops)
-    
-    #walk left
-    if y > 1:
-        walk(x, y-1, R, C, scores, min_scores_to_here, current_score, loops)
-    """
-
-print(sys.getrecursionlimit())
-sys.setrecursionlimit(2000)
 
 scores = []
 
-with open('python\\15.in','r') as f:
+with open('python/15.in','r') as f:
     for line in f.readlines():
         scores.append([int(x) for x in line.strip()])
 
+R = len(scores)
+C = len(scores[0])
 
 ## part 1 ##
 
-print(find_path(scores, loops = 1))
+visited_nodes = set()
+
+next_to_visit = deque([])
+current_node = Node(0,0,0)
+
+while current_node.x != R-1 or current_node.y != C-1:
+
+    if (current_node.x, current_node.y) not in visited_nodes:
+        
+        visited_nodes.add((current_node.x, current_node.y))
+
+        if current_node.x < R-1: # go down
+            bisect.insort(next_to_visit, Node(current_node.x+1, current_node.y, current_node.score + scores[current_node.x+1][current_node.y]))
+        
+        if current_node.y < C-1: # go right
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y+1, current_node.score + scores[current_node.x][current_node.y+1]))
+
+        if current_node.x > 0: # go up
+            bisect.insort(next_to_visit, Node(current_node.x-1, current_node.y, current_node.score + scores[current_node.x-1][current_node.y]))
+        
+        if current_node.y > 0: # go left
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y-1, current_node.score + scores[current_node.x][current_node.y-1]))
+        
+    current_node = next_to_visit.popleft()
+
+print(current_node.score)
 
 ## part 2 ##
 
-print(find_path(scores, loops = 5))
-# correct answer 2935 from 15.in
+visited_nodes = set()
+
+next_to_visit = deque([])
+current_node = Node(0,0,0)
+
+loops = 5
+
+while current_node.x != (loops * R - 1) or current_node.y != (loops * C - 1):
+
+    if (current_node.x, current_node.y) not in visited_nodes:
+        
+        visited_nodes.add((current_node.x, current_node.y))
+
+        if current_node.x < loops * R - 1: # go down
+            score_increase = scores[(current_node.x+1) % R][(current_node.y) % C] + ((current_node.x+1) // R) + (current_node.y // C)
+            score_increase = ((score_increase - 1) % 9) + 1
+            bisect.insort(next_to_visit, Node(current_node.x+1, current_node.y, current_node.score + score_increase))
+        
+        if current_node.y < loops * C - 1: # go right
+            score_increase = scores[current_node.x % R][(current_node.y+1) % C] + (current_node.x // R) + ((current_node.y+1)// C)
+            score_increase = ((score_increase - 1) % 9) + 1
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y+1, current_node.score + score_increase))
+
+        if current_node.x > 0: # go up
+            score_increase = scores[(current_node.x-1) % R][(current_node.y) % C] + ((current_node.x-1) // R) + (current_node.y // C)
+            score_increase = ((score_increase - 1) % 9) + 1
+            bisect.insort(next_to_visit, Node(current_node.x-1, current_node.y, current_node.score + score_increase))
+        
+        if current_node.y > 0: # go left
+            score_increase = scores[current_node.x % R][(current_node.y-1) % C] + (current_node.x // R) + ((current_node.y-1)// C)
+            score_increase = ((score_increase - 1) % 9) + 1
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y-1, current_node.score + score_increase))
+        
+    current_node = next_to_visit.popleft()
+
+print(current_node.score)
