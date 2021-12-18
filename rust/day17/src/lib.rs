@@ -3,23 +3,67 @@ use std::fmt::Error;
 pub fn part1() -> Option<i32> {
     
     // xmin xmax ymin ymax
-    let target_boundaries = get_puzzle_input().unwrap();
+    let target = get_puzzle_input().unwrap();
     
-    if target_boundaries.len() == 0 {
+    if target.len() == 0 {
         return None
     }
     
-    Some((0..-target_boundaries[2]).fold(0, |a, b| a + b))
+    Some((0..-target[2]).fold(0, |a, b| a + b))
 }
 
 pub fn part2() -> Option<i32> {
-    let target_boundaries = get_puzzle_input().unwrap();
+    let target = get_puzzle_input().unwrap();
     
-    if target_boundaries.len() == 0 {
+    if target.len() == 0 {
         return None
     }
 
-    Some(0)
+    let mut lowest_x = 0;
+    let mut total = 0;
+
+    while total < target[0] {
+        lowest_x += 1;
+        total += lowest_x;
+    }
+
+    let mut hits = 0;
+
+    for x in lowest_x..(target[1] + 1) {
+        for y in target[2]..(-target[1] + 1) {
+            match check_hit(x, y, target) {
+                Some(true) => hits += 1,
+                _ => (),
+            }
+        }
+    }
+    Some(hits)
+}
+
+fn check_hit(mut x_vel: i32, mut y_vel: i32, target: Vec<i32>) -> Option<bool> {
+    
+    let mut x = 0;
+    let mut y = 0;
+
+    if target.len() != 4 {
+        return None
+    }
+    
+    while x <= target[1] && y >= target[2] {
+        if target[0] <= x && x <= target[1] && target[2] <= y && y <= target[3] {
+            return Some(true)
+        }
+
+        x += x_vel;
+        y += y_vel;
+
+        y_vel -= 1;
+        if x_vel > 0 {
+            x_vel -= 1
+        } 
+    }
+
+    Some(false)
 }
 
 pub fn get_puzzle_input() -> Result<Vec<i32>,Error> {
