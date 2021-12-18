@@ -30,8 +30,8 @@ pub fn part2() -> Option<i32> {
     let mut hits = 0;
 
     for x in lowest_x..(target[1] + 1) {
-        for y in target[2]..(-target[1] + 1) {
-            match check_hit(x, y, target) {
+        for y in target[2]..(-target[2] + 1) {
+            match check_hit(x, y, &target) {
                 Some(true) => hits += 1,
                 _ => (),
             }
@@ -40,7 +40,7 @@ pub fn part2() -> Option<i32> {
     Some(hits)
 }
 
-fn check_hit(mut x_vel: i32, mut y_vel: i32, target: Vec<i32>) -> Option<bool> {
+fn check_hit(mut x_vel: i32, mut y_vel: i32, target: &Vec<i32>) -> Option<bool> {
     
     let mut x = 0;
     let mut y = 0;
@@ -48,7 +48,7 @@ fn check_hit(mut x_vel: i32, mut y_vel: i32, target: Vec<i32>) -> Option<bool> {
     if target.len() != 4 {
         return None
     }
-    
+
     while x <= target[1] && y >= target[2] {
         if target[0] <= x && x <= target[1] && target[2] <= y && y <= target[3] {
             return Some(true)
