@@ -212,8 +212,26 @@ while (len(snailfish_numbers) > 0):
     total_snailfish_number = reduce(total_snailfish_number)
 
 print(total_snailfish_number)
-score = score(total_snailfish_number)
+this_score = score(total_snailfish_number)
 
-print(score)
+print(this_score)
 
 ## part 2 ##
+
+snailfish_numbers = []
+
+with open('python\\18.in','r') as f:
+    for x in f.readlines():
+        snailfish_numbers.append(x.strip())
+
+high_score = 0
+
+for i in range(len(snailfish_numbers)):
+    for j in range(len(snailfish_numbers)):
+        if i != j:
+            total_snailfish_number = f'[{snailfish_numbers[i]},{snailfish_numbers[j]}]'
+            total_snailfish_number = reduce(total_snailfish_number)
+            this_score = score(total_snailfish_number)
+            high_score = max(high_score, this_score)
+
+print(high_score)
