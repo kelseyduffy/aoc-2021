@@ -168,12 +168,34 @@ def split(snailfish_number, i):
 
 
 def score(snailfish_number):
-    return 0
+    
+    # if the term is just a number, it's that number
+    if snailfish_number.isnumeric():
+        return int(snailfish_number)
+
+    # remove outermost [ and ], and find the comma that separates the two inner terms
+    i = 0
+    level = 0
+    for i in range(len(snailfish_number)):
+        
+        i += 1
+
+        if snailfish_number[i] == '[': 
+            level += 1
+        elif snailfish_number[i] == ']':
+            level -= 1
+        elif snailfish_number[i] == ',' and level == 0:
+            left_number = snailfish_number[1:i]
+            right_number = snailfish_number[i+1:-1]
+            break
+
+    # return 3 * score(left) + 2 * score(right)
+    return 3 * score(left_number) + 2 * score(right_number)
 
 
 snailfish_numbers = deque([])
 
-with open('python\\test3.in','r') as f:
+with open('python\\18.in','r') as f:
     for x in f.readlines():
         snailfish_numbers.append(x.strip())
 
