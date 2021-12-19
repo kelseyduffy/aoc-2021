@@ -4,7 +4,7 @@ def reduce(snailfish_number):
     
     while(True):
         # explode the leftmost eligible pair then loop again
-        exploded = False
+        has_exploded = False
 
         level = 0
         for i in range(len(snailfish_number)):
@@ -16,16 +16,16 @@ def reduce(snailfish_number):
             assert level < 6, f'unexpected level of {level}'
 
             if level == 5:
-                exploded = True
+                has_exploded = True
                 snailfish_number = explode(snailfish_number, i)
                 break
 
         # check for explosion, set to true if the action is taken
-        if exploded:
+        if has_exploded:
             continue
         
         # if nothing exploded, split the leftmost eligible number then loop again
-        split = False
+        has_split = False
 
         is_digit = False
         for i in range(len(snailfish_number)):
@@ -33,13 +33,13 @@ def reduce(snailfish_number):
                 is_digit = False
             else:
                 if is_digit:
-                    split = True
-                    snailfish_number = split(snailfish_number, i)
+                    has_split = True
+                    snailfish_number = split(snailfish_number, i-1)
                     break
                 is_digit = True
 
         # check for splitting, set to true if the action is taken
-        if split:
+        if has_split:
             continue
 
         # if nothing exploded or split, break
@@ -103,7 +103,7 @@ def explode(snailfish_number, i):
     right_i -= 1
     found_right_number = False
     right_num_string = ''
-    while right_i < len(snailfish_number):
+    while right_i < (len(snailfish_number) - 1):
         right_i += 1
         if snailfish_number[right_i] in { '[', ',', ']' }:
             continue
@@ -140,6 +140,8 @@ def explode(snailfish_number, i):
     if found_right_number:
         exploded_snailfish_number += f'{next_right_num}'                        # new right num 
         exploded_snailfish_number += snailfish_number[end_of_right_num:]        # before left num
+    else:
+        exploded_snailfish_number += snailfish_number[-1]                       # the accounting is off by 1 if you don't have a final piece
 
     return exploded_snailfish_number
 
@@ -171,7 +173,7 @@ def score(snailfish_number):
 
 snailfish_numbers = deque([])
 
-with open('python\\test2.in','r') as f:
+with open('python\\test3.in','r') as f:
     for x in f.readlines():
         snailfish_numbers.append(x.strip())
 
