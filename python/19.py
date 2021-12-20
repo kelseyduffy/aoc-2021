@@ -72,6 +72,12 @@ def try_match_scanners(known_scanner, unknown_scanner):
     # if we get this far, nothing matched
     return False, 0, 0, 0, 0
 
+def manhattan_distance(first_scanner_location, second_scanner_location):
+    x = abs(first_scanner_location[0] - second_scanner_location[0])
+    y = abs(first_scanner_location[1] - second_scanner_location[1])
+    z = abs(first_scanner_location[2] - second_scanner_location[2])
+    return x + y + z
+
 scanners = []
 rotations = [                   # (1,2,3) becomes:
     [[1,0,0],[0,1,0],[0,0,1]],          # (1,2,3)
@@ -103,7 +109,7 @@ rotations = [                   # (1,2,3) becomes:
 
 
 
-with open('python/test.in','r') as f:
+with open('python/19.in','r') as f:
     for line in f.readlines():
         if line.startswith('---'):
             """ I dont think I need the id for any reason
@@ -130,6 +136,10 @@ actual_beacons = { beacon for beacon in scanners[0].transformed_beacons }
 unkonwn_scanner_ids = { i for i in range(1,len(scanners)) }         # we don't know anything from 1 to 39
 known_scanner_ids = { 0 }                                           # we know the first scanner
 
+# keep track of where the scanners are, starting with scanner 0
+scanner_locations = set()
+scanner_locations.add((0,0,0))
+
 while len(unkonwn_scanner_ids) > 0:                                 # repeat until all scanners are known
     starting_count = len(known_scanner_ids)
 
@@ -145,9 +155,11 @@ while len(unkonwn_scanner_ids) > 0:                                 # repeat unt
                 
                 # store this scanner's set of beacons with their transformed location
                 scanners[unknown_scanner_id].transformed_beacons = { transform_location(beacon, x, y, z, rotation) for beacon in scanners[unknown_scanner_id].beacons }
-                
+
                 # add these beaconds to the list of actual beacons
                 actual_beacons.update(scanners[unknown_scanner_id].transformed_beacons)
+
+                scanner_locations.add((x,y,z))
 
                 # move to the next unknown scanner
                 break
@@ -162,3 +174,12 @@ while len(unkonwn_scanner_ids) > 0:                                 # repeat unt
     assert ending_count > starting_count, 'no scanner was matched on this round'
 
 print(len(actual_beacons))
+
+max_distance = 0
+
+for first_scanner_location in scanner_locations:
+    for second_scanner_location in scanner_locations:
+        this_distance = manhattan_distance(first_scanner_location, second_scanner_location)
+        max_distance = max(max_distance, this_distance)
+
+print(max_distance)
