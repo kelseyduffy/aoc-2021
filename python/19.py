@@ -97,7 +97,7 @@ rotations = [                   # (1,2,3) becomes:
 ]
 
 
-with open('python/test.in','r') as f:
+with open('python/19.in','r') as f:
     for line in f.readlines():
         if line.startswith('---'):
             """ I dont think I need the id for any reason
