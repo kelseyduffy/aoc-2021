@@ -37,11 +37,6 @@ for i,line in enumerate(lines):
                     cubes[(x,y,z)] = 0
     
     if i == 19: # only do the first 20 rules for part 1
+        print(sum(v for k,v in cubes.items()))
         break
 
-count = 0
-
-for cube in cubes:
-    count += cubes[cube]
-
-print(count)
