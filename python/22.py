@@ -12,14 +12,16 @@ def check_overlap(cube1, cube2):
     return False
 
 def find_new_cubes(new_cube, foundation_cube, instruction):
-    new_regions = set()
+    
+    global new_regions
 
     # if they're both on, don't double count the overlap
     if instruction == 'on':
         # add the new cube as is
         new_regions.add(new_cube)
         # add the pieces of the existing cube that are formed with the new cube chunking out of the foundation cube
-        return new_regions.update(find_new_cubes(new_cube, foundation_cube, 'off')) 
+        find_new_cubes(new_cube, foundation_cube, 'off')
+        return
 
     (new_x_low, new_x_high, new_y_low, new_y_high, new_z_low, new_z_high) = new_cube
     (x_low, x_high, y_low, y_high, z_low, z_high) = foundation_cube
@@ -31,8 +33,8 @@ def find_new_cubes(new_cube, foundation_cube, instruction):
         new_regions.add((new_x_high+1, x_high, y_low, y_high, z_low, z_high))
 
         # then add the pieces formed from the non-encompassing overlap
-        new_regions.update(find_new_cubes(new_cube, (x_low, new_x_high, y_low, y_high, z_low, z_high), 'off'))
-        return new_regions
+        find_new_cubes(new_cube, (x_low, new_x_high, y_low, y_high, z_low, z_high), 'off')
+        return
 
     if y_low < new_y_low and y_high > new_y_high:
         
@@ -40,8 +42,8 @@ def find_new_cubes(new_cube, foundation_cube, instruction):
         new_regions.add((x_low, x_high, new_y_high+1, y_high, z_low, z_high))
 
         # then add the pieces formed from the non-encompassing overlap
-        new_regions.update(find_new_cubes(new_cube, (x_low, x_high, y_low, new_y_high, z_low, z_high), 'off'))
-        return new_regions
+        find_new_cubes(new_cube, (x_low, x_high, y_low, new_y_high, z_low, z_high), 'off')
+        return
 
     if z_low < new_z_low and z_high > new_z_high:
         
@@ -49,19 +51,17 @@ def find_new_cubes(new_cube, foundation_cube, instruction):
         new_regions.add((x_low, x_high, y_low, y_high, new_z_high+1, z_high))
 
         # then add the pieces formed from the non-encompassing overlap
-        new_regions.update(find_new_cubes(new_cube, (x_low, x_high, y_low, y_high, z_low, new_z_high), 'off'))
-        return new_regions
+        find_new_cubes(new_cube, (x_low, x_high, y_low, y_high, z_low, new_z_high), 'off')
+        return
     
 
     # find overlapping x range and non-overlapping x range
-    overlap_x = None
     non_overlap_x = None
 
     if x_low == new_x_low:
         #    |----------|          existing x
         #    |-------|--|--|       new x -> 3 possibilites for new x's high
         # if they perfectly overlap with each other, the overlap is the range and there's no existing x-cube extension
-        overlap_x = (x_low, min(new_x_high, x_high))  # all 3 possibilities are covered by this min statement
         
         # only in the case that x extends beyond new_x on the high side, there's a non-overlapping zone that needs to be captured
         if x_high > new_x_high:
@@ -70,7 +70,6 @@ def find_new_cubes(new_cube, foundation_cube, instruction):
     elif x_low > new_x_low:
         #       |----------|       existing x
         #    |----------|--|--|    new x -> 3 possibilites for new x's high
-        overlap_x = (x_low, min(new_x_high, x_high))  # all 3 possibilities are covered by this min statement
 
         # only in the case that x extends beyond new_x on the high side, there's a non-overlapping zone that needs to be captured
         if x_high > new_x_high:
@@ -80,7 +79,6 @@ def find_new_cubes(new_cube, foundation_cube, instruction):
     elif x_low < new_x_low:
         #   |-----------|          existing x
         #     |------x--|--|       new x -> 2 possibilites for new x's high  (the completely emcompassing state was already eliminated above)
-        overlap_x = (new_x_low, x_high)
         non_overlap_x = (x_low, new_x_low - 1)
 
     # find overlapping y range and non-overlapping y range
@@ -137,8 +135,9 @@ def find_new_cubes(new_cube, foundation_cube, instruction):
         new_regions.add((non_overlap_x[0], non_overlap_x[1], overlap_y[0], overlap_y[1], overlap_z[0], overlap_z[1]))
     
     # In theory, 4 is (overlap x, overlap y, overlap z), but that's what we just eliminated
+    # this is why overlap x is not a variable that needs to be known
 
-    return new_regions
+    return
 
 rules = []
 
@@ -149,6 +148,7 @@ with open('python\\22.in','r') as f:
         rules.append((instr, (int(x1), int(x2), int(y1), int(y2), int(z1), int(z2))))
 
 ## part 1 ##
+# the 'brute force' method
 
 cubes = {}
 
@@ -169,8 +169,11 @@ for i,rule in enumerate(rules):
         break
 
 ## part 2 ##
+# the 'actual' method
 
 on_cube_regions = set()
+removed_regions = set()
+new_regions = set()
 
 for i, rule in enumerate(rules):
     print(i)
@@ -178,8 +181,9 @@ for i, rule in enumerate(rules):
     (x_low, x_high, y_low, y_high, z_low, z_high) = this_cube_region
 
     cubes_overlapped = False
-    removed_regions = set()
-    new_regions = set()
+    
+    removed_regions.clear()
+    new_regions.clear()
 
     for on_cube_region in on_cube_regions:
 
@@ -189,12 +193,11 @@ for i, rule in enumerate(rules):
         # if it does, mark the existing region for later deletion
         if overlap:
 
-            print(f'{this_cube_region} overlaps {on_cube_region}')
+            #print(f'{this_cube_region} overlaps {on_cube_region}')
             removed_regions.add(on_cube_region)
 
             # call the overlap function
-            new_regions.update(find_new_cubes(this_cube_region, on_cube_region, instruction))
-            print('test')
+            find_new_cubes(this_cube_region, on_cube_region, instruction)
 
     # delete the marked regions and add the new regions
     on_cube_regions -= removed_regions
