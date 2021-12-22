@@ -1,22 +1,10 @@
-lines = []
+rules = []
 
 with open('python\\22.in','r') as f:
     for line in f.readlines():
-        #lines.append(int(line.strip()))
-        
-        instruction,coords = line.strip().split()
-        x,y,z = coords.split(',')
-        x_low, x_high = x.replace('x=','').split('..')
-        x_low = int(x_low)
-        x_high = int(x_high)
-        y_low, y_high = y.replace('y=','').split('..')
-        y_low = int(y_low)
-        y_high = int(y_high)
-        z_low, z_high = z.replace('z=','').split('..')
-        z_low = int(z_low)
-        z_high = int(z_high)
-
-        lines.append((instruction, x_low, x_high, y_low, y_high, z_low, z_high))
+        rule = line.strip().replace(' ',',').replace('x=','').replace('y=','').replace('z=','').replace('..',',')
+        instr,x1,x2,y1,y2,z1,z2 = rule.split(',')
+        rules.append((instr, int(x1), int(x2), int(y1), int(y2), int(z1), int(z2)))
 
 ## part 1 ##
 
@@ -24,9 +12,9 @@ cubes = {}
 
 #print(lines)
 
-for i,line in enumerate(lines):
+for i,rule in enumerate(rules):
     print(i)
-    instruction, x_low, x_high, y_low, y_high, z_low, z_high = line
+    instruction, x_low, x_high, y_low, y_high, z_low, z_high = rule
 
     for x in range(x_low, x_high+1):
         for y in range(y_low, y_high+1):
@@ -37,6 +25,6 @@ for i,line in enumerate(lines):
                     cubes[(x,y,z)] = 0
     
     if i == 19: # only do the first 20 rules for part 1
-        print(sum(v for k,v in cubes.items()))
+        print(sum(v for _,v in cubes.items()))
         break
 
