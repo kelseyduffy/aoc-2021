@@ -1,4 +1,14 @@
-def check_overlap(this_cube_region, on_cube_region):
+def check_overlap(cube1, cube2):
+    (x1_low, x1_high, y1_low, y1_high, z1_low, z1_high) = cube1
+    (x2_low, x2_high, y2_low, y2_high, z2_low, z2_high) = cube2
+
+    # all three axis need to overlap for the cube regions to overlap. edges are inclusive
+
+    if x1_low <= x2_high and x1_high >= x2_low:
+        if y1_low <= y2_high and y1_high >= y2_low:
+            if z1_low <= z2_high and z1_high >= z2_low:
+                return True
+
     return False
 
 def find_new_cubes(this_cube_region, on_cube_region, instruction):
@@ -54,12 +64,12 @@ for i, rule in enumerate(rules):
 
         # if it does, mark the existing region for later deletion
         if overlap:
+
+            print(f'{this_cube_region} overlaps {on_cube_region}')
             removed_regions.add(on_cube_region)
 
-        # call the overlap function
-        new_regions = find_new_cubes(this_cube_region, on_cube_region, instruction)
-
-        pass
+            # call the overlap function
+            new_regions = find_new_cubes(this_cube_region, on_cube_region, instruction)
 
     # delete the marked regions
     on_cube_regions -= removed_regions
