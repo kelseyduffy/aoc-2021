@@ -84,7 +84,6 @@ stack_b = [] # all the Bronzes at the end
 stack_c = [] # all the Coppers at the end
 stack_d = [] # all the Deserts at the end
 
-lines = []
 with open('python\\23.in','r') as f:
     for i,line in enumerate(f):
         if i > 1 and i < 6: # just grab the four rooms
@@ -98,13 +97,13 @@ with open('python\\23.in','r') as f:
 # - what's in each hallway spot
 # - what's in each room
 
-# stacks are mutable and therefore not hashable, and therefore can't be part of the 'game state'
+# the stacks themselves are mutable and therefore not hashable, and therefore can't be part of the 'game state'
 # instead, the number of actions taken by a stack can be used
-# - each amphipod can only move once into the hallway, and once into its final room
+# - each amphipod can only move once into the hallway, and then into its final room
 # - the stacks can therefore not be rearranged. it only pops all 4 initial amphipods then pushes all 4 finals
 
 # this assumption relies on each stack needing to be completely emptied
-assert stack_a[3] != 'A', 'room A does not need to fully empty'
+assert stack_a[3] != 'A', 'room A does not need to fully empty'  # this actually fails on the test input
 assert stack_b[3] != 'B', 'room B does not need to fully empty'
 assert stack_c[3] != 'C', 'room C does not need to fully empty'
 assert stack_d[3] != 'D', 'room D does not need to fully empty'
@@ -138,25 +137,24 @@ upcoming_states = deque([])
 # when moving, apply the penalties per amphipod type
 costs = {'A': 1, 'B': 10, 'C': 100, 'D': 1000}
 
-# quicker stack lookups to eliminate repetitive code
-final_stack = {'A': stack_a, 'B': stack_b, 'C': stack_c, 'D': stack_d}
-
 # start at the initial state and loop until the final state is being visited
 current_state = initial_state
 score = 0
 
-while (current_state != final_state):
+while (current_state != final_state):  # the first time we get to the final state is the cheapest way to get there. exit the loop
 
-    # if we've been here before, we've been here for cheaper than now. skip the moves and pop the next state
+    # if we've been here before, we've been here for cheaper than we are now. skip the moves and pop the next cheapest state
     if current_state not in visited_states:
         
-        # record that we've been here now
+        # record that we've now been here
         visited_states.add(current_state)
 
         # destructure the current state tuple for more readable code
         (h1,h2,h4,h6,h8,h10,h11,a,b,c,d) = current_state
 
-        # if the A stack is not fully popped, pop the next one
+        # There's an elegant way to do this, but I need to just get it working first, hard coding all possible moves for now
+
+        # if the A stack is not fully popped, pop the next one into the hallway
         if a < 4:
             
             # these two are the same for any destination spot, these values just can't be changed within the individual hallway cases
@@ -166,7 +164,7 @@ while (current_state != final_state):
             if h1 == '.':                                   # pop to h1 if it's empty
                 if h2 == '.':                               # check for blockers
                     moves = 2 + moves_into_hallway          # moves to get to hallway spot from outside stack a
-                    cost = moves * costs[exiting_amphipod]    
+                    cost = moves * costs[exiting_amphipod]  # the cost of these moves depends on the amphipod being moved 
                     
                     # find the new state and cost, and insert it into the upcoming list of states to check
                     bisect.insort(upcoming_states, State((exiting_amphipod,h2,h4,h6,h8,h10,h11,a+1,b,c,d), score + cost))
@@ -341,15 +339,15 @@ while (current_state != final_state):
                     bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,h10,exiting_amphipod,a,b,c,d+1), score + cost))
 
         # push each hallway space to the correct final room
-            # 1. find the right stack to push to
+            # 1. find the right stack to push to and check that this stack is ready to be pushed to
             # 2. check if the path is blocked
             # 3. find the number of moves required
-            # 4. insert the resulting state with score + moved*cost into the upcoming states
-            # There's an elegant way to do this, but I need to just get it working first, hard coded for now
+            # 4. insert the resulting state with score + moves*cost into the upcoming states
+            # this logic is particularly tedious to hard code because each hallway spot is expanded to each final room (7 -> 28)
 
         if h1 != '.':
-            if h1 == 'A' and a > 3: # if it's an Amber and the amber ready is ready for entering
-                if h2 == '.': # h2 is between h1 and A's entry
+            if h1 == 'A' and a > 3:             # if it's an Amber and the amber room is ready for entering
+                if h2 == '.':                   # h2 is between h1 and A's entry, check that it's clear
                     moves = 2                   # start with moves to get to the hallway spot outside the room
                     moves += (8-a)              # add the number of moves to get into the bottom most spot
                     cost = costs[h1] * moves    # convert this to a cost for the total move
@@ -359,13 +357,10 @@ while (current_state != final_state):
                     bisect.insort(upcoming_states, State(('.',h2,h4,h6,h8,h10,h11,a+1,b,c,d), score + cost))
 
             elif h1 == 'B' and b > 3:
-                if h2 == '.' and h4 == '.': # h2 and h4 need to be clear
+                if h2 == '.' and h4 == '.':
                     moves = 4
                     moves += (8-b)
                     cost = costs[h1] * moves
-
-                    # the next state is h1 cleared out and b advanced a state, scored at current score + this cost
-                    # insert this state into the list of upcoming states, in order of cheapest cost
                     bisect.insort(upcoming_states, State(('.',h2,h4,h6,h8,h10,h11,a,b+1,c,d), score + cost))
 
             elif h1 == 'C' and c > 3:
@@ -383,14 +378,14 @@ while (current_state != final_state):
                     bisect.insort(upcoming_states, State(('.',h2,h4,h6,h8,h10,h11,a,b,c,d+1), score + cost))
 
         if h2 != '.':
-            if h2 == 'A' and a > 3: # no blockers
+            if h2 == 'A' and a > 3:
                 moves = 1
                 moves += (8-a)
                 cost = costs[h2] * moves
                 bisect.insort(upcoming_states, State((h1,'.',h4,h6,h8,h10,h11,a+1,b,c,d), score + cost))
 
             elif h2 == 'B' and b > 3:
-                if h4 == '.': # h4 needs to be clear
+                if h4 == '.':
                     moves = 3
                     moves += (8-b)
                     cost = costs[h2] * moves
@@ -412,13 +407,13 @@ while (current_state != final_state):
 
 
         if h4 != '.':
-            if h4 == 'A' and a > 3: # no blockers
+            if h4 == 'A' and a > 3:
                 moves = 1
                 moves += (8-a)
                 cost = costs[h4] * moves
                 bisect.insort(upcoming_states, State((h1,h2,'.',h6,h8,h10,h11,a+1,b,c,d), score + cost))
 
-            elif h4 == 'B' and b > 3: # no blockers
+            elif h4 == 'B' and b > 3:
                 moves = 1
                 moves += (8-b)
                 cost = costs[h4] * moves
@@ -446,13 +441,13 @@ while (current_state != final_state):
                     cost = costs[h6] * moves
                     bisect.insort(upcoming_states, State((h1,h2,h4,'.',h8,h10,h11,a+1,b,c,d), score + cost))
 
-            elif h6 == 'B' and b > 3: # no blockers
+            elif h6 == 'B' and b > 3:
                 moves = 1
                 moves += (8-b)
                 cost = costs[h6] * moves
                 bisect.insort(upcoming_states, State((h1,h2,h4,'.',h8,h10,h11,a,b+1,c,d), score + cost))
 
-            elif h6 == 'C' and c > 3: # no blockers
+            elif h6 == 'C' and c > 3:
                 moves = 1
                 moves += (8-c)
                 cost = costs[h6] * moves
@@ -480,13 +475,13 @@ while (current_state != final_state):
                     cost = costs[h8] * moves
                     bisect.insort(upcoming_states, State((h1,h2,h4,h6,'.',h10,h11,a,b+1,c,d), score + cost))
 
-            elif h8 == 'C' and c > 3: # no blockers
+            elif h8 == 'C' and c > 3:
                 moves = 1
                 moves += (8-c)
                 cost = costs[h8] * moves
                 bisect.insort(upcoming_states, State((h1,h2,h4,h6,'.',h10,h11,a,b,c+1,d), score + cost))
 
-            elif h8 == 'D' and d > 3: # no blockers
+            elif h8 == 'D' and d > 3:
                 moves = 1
                 moves += (8-d)
                 cost = costs[h8] * moves
@@ -514,7 +509,7 @@ while (current_state != final_state):
                     cost = costs[h10] * moves
                     bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,'.',h11,a,b,c+1,d), score + cost))
 
-            elif h10 == 'D' and d > 3: # no blockers
+            elif h10 == 'D' and d > 3:
                 moves = 1
                 moves += (8-d)
                 cost = costs[h10] * moves
@@ -549,10 +544,10 @@ while (current_state != final_state):
                     cost = costs[h11] * moves
                     bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,h10,'.',a,b,c,d+1), score + cost))
 
-    # pop off the next cheapest state to visit and reloop
+    # pop off the next cheapest state to visit
     next_state = upcoming_states.popleft()
 
-    # destructure the class for the next loop
+    # destructure the State object for the next loop
     current_state = next_state.state
     score = next_state.score
 
