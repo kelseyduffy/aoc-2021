@@ -61,6 +61,7 @@
 #   A#B#C#D
 
 # total is 14415
+print(14415)
 
 ## part 2 ##
 # coerce it into a weighted path finding algorithm
