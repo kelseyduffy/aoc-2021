@@ -1,10 +1,7 @@
-lines = []
+from typing import Collection
 
-with open('python\\23.in','r') as f:
-    for line in f.readlines():
-        #lines.append([int(x) for x in line.strip()])
-        #lines.append(int(line.strip()))
-        lines.append(line.strip())
+
+from collections import deque
 
 # Rules
 # -----
@@ -25,8 +22,7 @@ with open('python\\23.in','r') as f:
 # B's and A's can move as necessary, A priorized over B
 
 ## part 1 ## 
-
-# just do it by hand
+# solve it by hand
 
 # START
 # ........... #
@@ -72,4 +68,64 @@ with open('python\\23.in','r') as f:
 # total is 14415
 
 ## part 2 ##
+# coerce it into a weighted path finding algorithm
+
+# each room is a stack
+# index 0 is the bottom; index 3 is the top
+stack_a = [] # the first stack, where all the A's will eventual reside
+stack_b = [] # all the B's at the end
+stack_c = [] # all the C's at the end
+stack_d = [] # all the D's at the end
+
+lines = []
+with open('python\\23.in','r') as f:
+    for i,line in enumerate(f):
+        if i > 1 and i < 6: # just grab the four rooms
+            lines.append(line.strip().replace('#',''))
+
+# build the initial stacks representing the rooms
+for line in reversed(lines):
+    stack_a.append(line[0])
+    stack_b.append(line[1])
+    stack_c.append(line[2])
+    stack_d.append(line[3])
+
+# the game state is represented by:
+# - what's in each hallway spot
+# - what's in each room
+
+# stacks are mutable and therefore not hashable, and therefore can't be part of the 'game state'
+# instead, the number of actions taken by a stack can be used
+# - each amphipod can only move once into the hallway, and once into its final room
+# - the stacks can therefore not be rearranged. it only pops all 4 initial amphipods then pushes all 4 finals
+
+# this assumption relies on each stack needing to be completely emptied
+assert stack_a[0] != 'A', 'room A does not need to fully empty'
+assert stack_b[0] != 'B', 'room B does not need to fully empty'
+assert stack_c[0] != 'C', 'room C does not need to fully empty'
+assert stack_d[0] != 'D', 'room D does not need to fully empty'
+
+# Stack States:
+# 0: all initial amphipods      |   W X Y Z
+# 1: top space empty            |   W X Y .
+# 2: top 2 spaces empty         |   W X . .
+# 3: top 3 spaces empty         |   W . . .
+# 4: room completely empty      |   . . . . 
+# 5: first amphipod in place    |   A . . .
+# 6: second amphipod in place   |   A A . .
+# 7: third amphipod in place    |   A A A .
+# 8: room in final state        |   A A A A
+
+# game state is (hallway1, hallway2, hallway4, h6, h8, h10, h11, stack_a_state, b_state, c, d)
+# - hallway spots 3, 5, 7, and 9 must always be '.' because you can't block a room
+# at the beginning, the hallway is clear and the stacks are all state 0
+initial_state = ('.','.','.','.','.','.','.',0,0,0,0)
+
+# in the end, the hallway is clear and the stacks are all in state 8
+final_state = ('.','.','.','.','.','.','.',8,8,8,8)
+
+visited_states = set()
+upcoming_states = deque([])
+
+costs = {'A': 1, 'B': 10, 'C': 100, 'D': 1000}
 
