@@ -15,7 +15,7 @@ Rust for learning
 |07|39518|37296|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml)|20|13882|13530|--|
 |08|1878|22657|--|21|13182|11044|--|
 |09|31083|29188|--|22|1248|6022|--|
-|10|3306|2974|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml)|23|--|--|--|
+|10|3306|2974|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml)|23|665|--|--|
 |11|2137|2046|--|24|--|--|--|
 |12|23038|22041|--|__25__|--|--|--|
 |13|34066|33340|--|~~|~~|~~|~~|
