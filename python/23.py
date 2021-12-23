@@ -158,19 +158,187 @@ while (current_state != final_state):
 
         # if the A stack is not fully popped, pop the next one
         if a < 4:
-            pass
+            
+            # these two are the same for any destination spot, these values just can't be changed within the individual hallway cases
+            moves_into_hallway = a + 1          # moves to get top item into hallway spot outside stack a
+            exiting_amphipod = stack_a[a]       # the amphipod being moved is the (state)th item in the original list (this prevents any necessary stack mutations)
+            
+            if h1 == '.':                                   # pop to h1 if it's empty
+                if h2 == '.':                               # check for blockers
+                    moves = 2 + moves_into_hallway          # moves to get to hallway spot from outside stack a
+                    cost = moves * costs[exiting_amphipod]    
+                    
+                    # find the new state and cost, and insert it into the upcoming list of states to check
+                    bisect.insort(upcoming_states, State((exiting_amphipod,h2,h4,h6,h8,h10,h11,a+1,b,c,d), score + cost))
+            
+            if h2 == '.':      
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,exiting_amphipod,h4,h6,h8,h10,h11,a+1,b,c,d), score + cost))
+
+            if h4 == '.':      
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,exiting_amphipod,h6,h8,h10,h11,a+1,b,c,d), score + cost))
+
+            if h6 == '.':      
+                if h4 == '.':
+                    moves = 3 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,exiting_amphipod,h8,h10,h11,a+1,b,c,d), score + cost))
+
+            if h8 == '.':      
+                if h4 == '.' and h6 == '.':
+                    moves = 5 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,exiting_amphipod,h10,h11,a+1,b,c,d), score + cost))
+
+            if h10 == '.':      
+                if h4 == '.' and h6 == '.' and h8 == '.':
+                    moves = 7 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,exiting_amphipod,h11,a+1,b,c,d), score + cost))
+
+            if h11 == '.':      
+                if h4 == '.' and h6 == '.' and h8 == '.' and h10 == '.':
+                    moves = 8 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,h10,exiting_amphipod,a+1,b,c,d), score + cost))
 
         # if the B stack is not fully popped, pop the next one
         if b < 4:
-            pass
+            moves_into_hallway = b + 1
+            exiting_amphipod = stack_b[b]
+
+            if h1 == '.':
+                if h2 == '.' and h4 == '.':     
+                    moves = 4 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((exiting_amphipod,h2,h4,h6,h8,h10,h11,a,b+1,c,d), score + cost))
+            
+            if h2 == '.':
+                if h4 == '.':  
+                    moves = 3 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,exiting_amphipod,h4,h6,h8,h10,h11,a,b+1,c,d), score + cost))
+            
+            if h4 == '.':  
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,exiting_amphipod,h6,h8,h10,h11,a,b+1,c,d), score + cost))
+
+            if h6 == '.':  
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,h4,exiting_amphipod,h8,h10,h11,a,b+1,c,d), score + cost))
+
+            if h8 == '.':
+                if h6 == '.':
+                    moves = 3 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,exiting_amphipod,h10,h11,a,b+1,c,d), score + cost))
+
+            if h10 == '.':
+                if h6 == '.' and h8 == '.':
+                    moves = 5 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,exiting_amphipod,h11,a,b+1,c,d), score + cost))
+
+            if h11 == '.':
+                if h6 == '.' and h8 == '.' and h10 == '.':
+                    moves = 6 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,h10,exiting_amphipod,a,b+1,c,d), score + cost))
 
         # if the C stack is not fully popped, pop the next one
         if c < 4:
-            pass
+            moves_into_hallway = c + 1
+            exiting_amphipod = stack_c[c]
+
+            if h1 == '.':
+                if h2 == '.' and h4 == '.' and h6 == '.':     
+                    moves = 6 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((exiting_amphipod,h2,h4,h6,h8,h10,h11,a,b,c+1,d), score + cost))
+            
+            if h2 == '.':
+                if h4 == '.' and h6 == '.':  
+                    moves = 5 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,exiting_amphipod,h4,h6,h8,h10,h11,a,b,c+1,d), score + cost))
+            
+            if h4 == '.':
+                if h6 == '.':
+                    moves = 3 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,exiting_amphipod,h6,h8,h10,h11,a,b,c+1,d), score + cost))
+
+            if h6 == '.':  
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,h4,exiting_amphipod,h8,h10,h11,a,b,c+1,d), score + cost))
+
+            if h8 == '.':
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,h4,h6,exiting_amphipod,h10,h11,a,b,c+1,d), score + cost))
+
+            if h10 == '.':
+                if h8 == '.':
+                    moves = 3 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,exiting_amphipod,h11,a,b,c+1,d), score + cost))
+
+            if h11 == '.':
+                if h8 == '.' and h10 == '.':
+                    moves = 4 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,h10,exiting_amphipod,a,b,c+1,d), score + cost))
 
         # if the D stack is not fully popped, pop the next one
         if d < 4:
-            pass
+            moves_into_hallway = d + 1
+            exiting_amphipod = stack_d[d]
+
+            if h1 == '.':
+                if h2 == '.' and h4 == '.' and h6 == '.' and h8 == '.':     
+                    moves = 8 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((exiting_amphipod,h2,h4,h6,h8,h10,h11,a,b,c,d+1), score + cost))
+            
+            if h2 == '.':
+                if h4 == '.' and h6 == '.' and h8 == '.':  
+                    moves = 7 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,exiting_amphipod,h4,h6,h8,h10,h11,a,b,c,d+1), score + cost))
+            
+            if h4 == '.':
+                if h6 == '.' and h8 == '.':
+                    moves = 5 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,exiting_amphipod,h6,h8,h10,h11,a,b,c,d+1), score + cost))
+
+            if h6 == '.':  
+                if h8 == '.':
+                    moves = 3 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,exiting_amphipod,h8,h10,h11,a,b,c,d+1), score + cost))
+
+            if h8 == '.':
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,h4,h6,exiting_amphipod,h10,h11,a,b,c,d+1), score + cost))
+
+            if h10 == '.':
+                moves = 1 + moves_into_hallway
+                cost = moves * costs[exiting_amphipod]
+                bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,exiting_amphipod,h11,a,b,c,d+1), score + cost))
+
+            if h11 == '.':
+                if h10 == '.':
+                    moves = 2 + moves_into_hallway
+                    cost = moves * costs[exiting_amphipod]
+                    bisect.insort(upcoming_states, State((h1,h2,h4,h6,h8,h10,exiting_amphipod,a,b,c,d+1), score + cost))
 
         # push each hallway space to the correct final room
             # 1. find the right stack to push to
