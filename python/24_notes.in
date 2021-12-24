@@ -1,3 +1,24 @@
+Template for each round:
+inp w           | w is the digit
+mul x 0         --| x = 0
+add x z         --| x = incoming_z
+mod x 26        --| x = (incoming_z % 26)
+div z _A_       --| z = incoming_x // _A_
+add x _B_       --| x = (incoming_z % 26) + _B_
+eql x w         --| x = 1 if [w == (incoming_z % 26) + _B_] else 0
+eql x 0         | x = 0 if [w == (incoming_z % 26) + _B_] else 1
+mul y 0         --| y = 0
+add y 25        --| y = 25
+mul y x         --| y = 0 if [w == (incoming_z % 26) + _B_] else 25
+add y 1         --| y = 1 if [w == (incoming_z % 26) + _B_] else 26
+mul z y         | z = (incoming_z // _A_) if [w == (incoming_z % 26) + _B_] else 26 * incoming_z
+mul y 0         --| y = 0
+add y w         --| y = w
+add y _C_       --| y = w + _C_
+mul y x         | y = 0 if [w == (incoming_z % 26) + _B_] else (w + _C_)
+add z y         | if [w == (incoming_z % 26) + _B_]: z = (incoming_z // _A_) else (26 * incoming_z) + (w + _C_)
+
+
 inp w
 mul x 0
 add x z
@@ -196,6 +217,8 @@ add y w
 add y 4
 mul y x
 add z y
+
+
 inp w
 mul x 0
 add x z
@@ -214,12 +237,37 @@ add y w
 add y 13
 mul y x
 add z y
+
+round 13:
+inp w           | w is 13th digit            
+mul x 0         --| x zerod out
+add x z         --| x = incoming_z
+mod x 26        --| x = incoming_z % 26
+div z 26        --| z = incoming_z // 26
+add x -14       --| x = (incoming_z % 26) - 14  ==> ranges from -14 to 11
+eql x w         --| x = 1 if [w == (incoming_z % 26) - 14], 0 if not
+eql x 0         | x = 0 if [w == (incoming_z % 26) - 14], 1 if not
+mul y 0         --| y is zerod out
+add y 25        --| y = 25
+mul y x         --| y = 0 if [w == (incoming_z % 26) - 14] else 25
+add y 1         --| y = 1 if [w == (incoming_z % 26) - 14] else 26
+mul z y         | z = incoming_z // 26 if [w == (incoming_z % 26) - 14] else 26 * incoming_z // 26
+mul y 0         --| y is zerod out
+add y w         --| y = w
+add y 4         --| y = w + 4
+mul y x         | y = 0 if [w == (incoming_z % 26) - 14], else (w + 4)
+add z y         | z = if [w == (incoming_z % 26) - 14]: incoming_z // 26 + 0 else (26 * incoming_z // 26) + w + 4
+  z needs to be | 6 <= z + y <= 14
+
+## z here needs to be last digit + 5 ##
+
+round 14:  
 inp w
 mul x 0
 add x z
 mod x 26
 div z 26
-add x -14
+add x -5
 eql x w
 eql x 0
 mul y 0
@@ -229,12 +277,11 @@ add y 1
 mul z y
 mul y 0
 add y w
-add y 4
+add y 14
 mul y x
 add z y
-## z here needs to be last digit + 5 ##
 
-round 14:  
+meaning:
 inp w
 - incoming z matters
     - divide z by 26
