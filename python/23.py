@@ -85,7 +85,7 @@ stack_b = [] # all the Bronzes at the end
 stack_c = [] # all the Coppers at the end
 stack_d = [] # all the Deserts at the end
 
-with open('python/test.in','r') as f:
+with open('python/23.in','r') as f:
     for i,line in enumerate(f):
         if i > 1 and i < 6: # just grab the four rooms
             amphipods = line.strip().replace('#','') # get rid of the wall markers
@@ -554,3 +554,4 @@ while (current_state != final_state):  # the first time we get to the final stat
 
 # when the final state is being visited for the first time, it has to be the cheapest way to get there. print the score
 print(score)
+print(len(visited_states))
