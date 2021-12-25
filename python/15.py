@@ -2,10 +2,12 @@ from collections import deque
 import bisect
 
 class Node:
-    def __init__(self, x, y, score):
+    def __init__(self, x, y, score, path, new_stop):
         self.x = x
         self.y = y
         self.score = score
+        self.path = [x for x in path]
+        self.path.append(new_stop)
 
     def __lt__(self, other):
         return self.score < other.score
@@ -25,7 +27,8 @@ C = len(scores[0])
 visited_nodes = set()
 
 next_to_visit = deque([])
-current_node = Node(0,0,0)
+current_node = Node(0,0,0,[],(0,0))
+path = []
 
 while current_node.x != R-1 or current_node.y != C-1:
 
@@ -34,27 +37,28 @@ while current_node.x != R-1 or current_node.y != C-1:
         visited_nodes.add((current_node.x, current_node.y))
 
         if current_node.x < R-1 and (current_node.x + 1, current_node.y) not in visited_nodes: # go down
-            bisect.insort(next_to_visit, Node(current_node.x+1, current_node.y, current_node.score + scores[current_node.x+1][current_node.y]))
+            bisect.insort(next_to_visit, Node(current_node.x+1, current_node.y, current_node.score + scores[current_node.x+1][current_node.y], current_node.path, (current_node.x+1, current_node.y)))
         
         if current_node.y < C-1 and (current_node.x, current_node.y + 1) not in visited_nodes: # go right
-            bisect.insort(next_to_visit, Node(current_node.x, current_node.y+1, current_node.score + scores[current_node.x][current_node.y+1]))
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y+1, current_node.score + scores[current_node.x][current_node.y+1], current_node.path, (current_node.x, current_node.y+1)))
 
         if current_node.x > 0 and (current_node.x - 1, current_node.y) not in visited_nodes: # go up
-            bisect.insort(next_to_visit, Node(current_node.x-1, current_node.y, current_node.score + scores[current_node.x-1][current_node.y]))
+            bisect.insort(next_to_visit, Node(current_node.x-1, current_node.y, current_node.score + scores[current_node.x-1][current_node.y], current_node.path, (current_node.x-1, current_node.y)))
         
         if current_node.y > 0 and (current_node.x, current_node.y - 1) not in visited_nodes: # go left
-            bisect.insort(next_to_visit, Node(current_node.x, current_node.y-1, current_node.score + scores[current_node.x][current_node.y-1]))
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y-1, current_node.score + scores[current_node.x][current_node.y-1], current_node.path, (current_node.x, current_node.y-1)))
         
     current_node = next_to_visit.popleft()
 
 print(current_node.score)
+#print(current_node.path)
 
 ## part 2 ##
 
 visited_nodes = set()
 
 next_to_visit = deque([])
-current_node = Node(0,0,0)
+current_node = Node(0,0,0,[],(0,0))
 
 loops = 5
 
@@ -67,23 +71,24 @@ while current_node.x != (loops * R - 1) or current_node.y != (loops * C - 1):
         if current_node.x < loops * R - 1 and (current_node.x + 1, current_node.y) not in visited_nodes: # go down
             score_increase = scores[(current_node.x+1) % R][(current_node.y) % C] + ((current_node.x+1) // R) + (current_node.y // C)
             score_increase = ((score_increase - 1) % 9) + 1
-            bisect.insort(next_to_visit, Node(current_node.x+1, current_node.y, current_node.score + score_increase))
+            bisect.insort(next_to_visit, Node(current_node.x+1, current_node.y, current_node.score + score_increase, current_node.path, (current_node.x+1, current_node.y)))
         
         if current_node.y < loops * C - 1 and (current_node.x, current_node.y + 1) not in visited_nodes: # go right
             score_increase = scores[current_node.x % R][(current_node.y+1) % C] + (current_node.x // R) + ((current_node.y+1)// C)
             score_increase = ((score_increase - 1) % 9) + 1
-            bisect.insort(next_to_visit, Node(current_node.x, current_node.y+1, current_node.score + score_increase))
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y+1, current_node.score + score_increase, current_node.path, (current_node.x, current_node.y+1)))
 
         if current_node.x > 0 and (current_node.x - 1, current_node.y) not in visited_nodes: # go up
             score_increase = scores[(current_node.x-1) % R][(current_node.y) % C] + ((current_node.x-1) // R) + (current_node.y // C)
             score_increase = ((score_increase - 1) % 9) + 1
-            bisect.insort(next_to_visit, Node(current_node.x-1, current_node.y, current_node.score + score_increase))
+            bisect.insort(next_to_visit, Node(current_node.x-1, current_node.y, current_node.score + score_increase, current_node.path, (current_node.x-1, current_node.y)))
         
         if current_node.y > 0 and (current_node.x, current_node.y - 1) not in visited_nodes: # go left
             score_increase = scores[current_node.x % R][(current_node.y-1) % C] + (current_node.x // R) + ((current_node.y-1)// C)
             score_increase = ((score_increase - 1) % 9) + 1
-            bisect.insort(next_to_visit, Node(current_node.x, current_node.y-1, current_node.score + score_increase))
+            bisect.insort(next_to_visit, Node(current_node.x, current_node.y-1, current_node.score + score_increase, current_node.path, (current_node.x, current_node.y-1)))
         
     current_node = next_to_visit.popleft()
 
 print(current_node.score)
+#print(current_node.path)
