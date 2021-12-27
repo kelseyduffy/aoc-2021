@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use std::fmt::Error;
 
 pub fn part1() -> Option<u32> {
@@ -13,15 +14,15 @@ pub fn part1() -> Option<u32> {
     
     let mut something_moved_east = true;
     let mut something_moved_south = true;
-    let mut steps = 0;
+    let mut round = 0;
 
     while something_moved_east || something_moved_south {
-        steps += 1;
+        round += 1;
         something_moved_east = move_east(&mut cucumbers);
         something_moved_south = move_south(&mut cucumbers);
     }
 
-    Some(steps)
+    Some(round)
 }
 
 pub fn part2() -> Option<&'static str> {
@@ -36,13 +37,47 @@ pub fn get_puzzle_input() -> Result<Vec<Vec<u8>>,Error> {
 }
 
 pub fn move_east(cucumbers: &mut Vec<Vec<u8>>) -> bool {
+    let row_count = cucumbers.len();
+    let col_count = cucumbers[0].len();
+    let mut newcumbers = vec![vec![b'.'; col_count]; row_count];
+    let mut moved = false;
 
-    false
+    for (r,c) in (0..row_count).cartesian_product(0..col_count) {
+        match cucumbers[r][c] {
+            b'>' if cucumbers[r][(c+1)%col_count] == b'.' => {
+                newcumbers[r][(c+1)%col_count] = b'>';
+                moved = true;
+            }
+            b'>' => newcumbers[r][c] = b'>',
+            b'v' => newcumbers[r][c] = b'v',
+            _ => {},
+        }
+    }
+
+    *cucumbers = newcumbers;
+    moved
 }
 
 pub fn move_south(cucumbers: &mut Vec<Vec<u8>>) -> bool {
-    
-    false
+    let row_count = cucumbers.len();
+    let col_count = cucumbers[0].len();
+    let mut newcumbers = vec![vec![b'.'; col_count]; row_count];
+    let mut moved = false;
+
+    for (r,c) in (0..row_count).cartesian_product(0..col_count) {
+        match cucumbers[r][c] {
+            b'>' => newcumbers[r][c] = b'>',
+            b'v' if cucumbers[(r+1)%row_count][c] == b'.' => {
+                newcumbers[(r+1)%row_count][c] = b'v';
+                moved = true;
+            }
+            b'v' => newcumbers[r][c] = b'v',
+            _ => {},
+        }
+    }
+
+    *cucumbers = newcumbers;
+    moved
 }
 
 #[cfg(test)]
