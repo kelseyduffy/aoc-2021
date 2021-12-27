@@ -6,9 +6,9 @@ Rust for learning
 
 | Day | Part 1 | Part 2 | Rust | Day | Part 1 | Part 2 | Rust |
 |:---:|---:|---:|:---|:---:|---:|---:|:---|
-|[01](python/01.py)|1351|2583|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|[14](python/14.py)|4874|20470|--|
-|[02](python/02.py)|__292__|1320|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml)|[15](python/15.py)|18353|17707|--|
-|[03](python/03.py)|55599|49244|--|[16](python/16.py)|18879|17142|--|
+|[01 - sonar](python/01.py)|1351|2583|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|[14 - polymers](python/14.py)|4874|20470|--|
+|[02- diving](python/02.py)|__292__|1320|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml)|[15 - chiton](python/15.py)|18353|17707|--|
+|[03 - binary](python/03.py)|55599|49244|--|[16](python/16.py)|18879|17142|--|
 |[04](python/04.py)|1665|2280|--|[17](python/17.py)|14200|16017|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day17.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day17.yml)|
 |[05](python/05.py)|38916|36070|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml)|[18](python/18.py)|13493|13295|--|
 |[06](python/06.py)|__333__|7849|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day06.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day06.yml)|[19](python/19.py)|8192|7945|--|
