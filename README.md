@@ -10,7 +10,7 @@ Rust for learning
 |[02- diving](python/02.py)|__292__|1320|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml)|[15 - chiton](python/15.py)|18353|17707|--|
 |[03 - binary](python/03.py)|55599|49244|--|[16 - protocol](python/16.py)|18879|17142|--|
 |[04 - squid bingo](python/04.py)|1665|2280|--|[17 - kinetics](python/17.py)|14200|16017|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day17.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day17.yml)|
-|[05 - vents](python/05.py)|38916|36070|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml)|[18 - snailfish](python/18.py)|13493|13295|--|
+|[05 - hydro vents](python/05.py)|38916|36070|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml)|[18 - snailfish](python/18.py)|13493|13295|--|
 |[06 - lanternfish](python/06.py)|__333__|7849|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day06.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day06.yml)|[19 - rotations](python/19.py)|8192|7945|--|
 |[07 - crab subs](python/07.py)|39518|37296|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml)|[20 - trenches](python/20.py)|13882|13530|--|
 |[08 - crypto](python/08.py)|1878|22657|--|[21 - multiverse](python/21.py)|13182|11044|--|
