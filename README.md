@@ -15,7 +15,7 @@ Rust for learning
 |[07 - crab subs](python/07.py)|39518|37296|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml)|[20 - trenches](python/20.py)|13882|13530|--|
 |[08 - crypto](python/08.py)|1878|22657|--|[21 - multiverse](python/21.py)|13182|11044|--|
 |[09 - basins](python/09.py)|31083|29188|--|[22 - cubes](python/22.py)|1248|6022|--|
-|[10 - syntax](python/10.py)|3306|2974|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml)|[23 - amphipods](python/23.py)|**665**|4577|--|
+|[10 - syntax](python/10.py)|3306|2974|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml)|[23 - amphipods](python/23.py)|__665__|4577|--|
 |[11 - octo flashes](python/11.py)|2137|2046|--|[24 - assembly](python/24.py)|4702|4561|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml)|
-|[12 - spelunking](python/12.py)|23038|22041|--|[__25__ - cucumbers]((python/25.py))|**999**|**818**|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml)|
+|[12 - spelunking](python/12.py)|23038|22041|--|[__25__ - cucumbers]((python/25.py))|__999__|__818__|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml)|
 |[13 - folding](python/13.py)|34066|33340|--|~~|~~|~~|~~|
