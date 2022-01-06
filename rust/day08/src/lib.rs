@@ -33,8 +33,110 @@ impl Line {
             .unwrap()
     }
 
-    fn decode_output(&self) -> Result<i32, Error> {
-        Ok(0)
+    fn decode_output(&self) -> Result<i32, ()> {
+        
+        if self.input.len() != 10 {
+            return Err(());
+        }
+
+        let mut fivers: Vec<HashSet<u8>> = Vec::new();
+        let mut sixers: Vec<HashSet<u8>> = Vec::new();
+
+        let mut cf = HashSet::new();
+        let mut bcdf = HashSet::new();
+        let mut acf = HashSet::new();
+        let mut abcdefg = HashSet::new();
+        
+        for in_digit in self.input {
+
+            if in_digit.len() == 2 {
+                cf.extend(&in_digit);
+            }
+
+            else if in_digit.len() == 3 {
+                acf.extend(&in_digit);
+            }
+
+            else if in_digit.len() == 4 {
+                bcdf.extend(&in_digit);
+            }
+
+            else if in_digit.len() == 5 {
+                fivers.append(&in_digit.iter().copied().collect());
+            }
+
+            else if in_digit.len() == 6 {
+                sixers.append(&in_digit.iter().copied().collect());
+            }
+
+            else if in_digit.len() == 7 {
+                abcdefg.extend(&in_digit);
+            }
+        }
+
+        let adg: HashSet<_> = fivers[0].intersection(&fivers[1]).copied().collect().intersection(&fivers[2]).copied().collect();
+        let abfg: HashSet<_> = sixers[0].intersection(&sixers[1]).copied().collect().intersection(&sixers[2]).copied().collect();
+        let ag: HashSet<_> = adg.intersection(&abfg).copied().collect();
+
+        let a: HashSet<_> = acf.difference(&cf).collect();
+        let bd: HashSet<_> = bcdf.difference(&cf).collect();
+        let eg: HashSet<_> = abcdefg.difference(&bcdf).collect().difference(&a).collect();
+        let g: HashSet<_> = ag.difference(&a).collect();
+        let e: HashSet<_> = eg.difference(&g).collect();
+        let d: HashSet<_> = adg.difference(&ag).collect();
+        let b: HashSet<_> = bd.difference(&d).collect();
+
+        let mut out_string = String::from("");
+
+        for out_digit in self.output {
+            
+            if out_digit.len() == 2 {
+                out_string = out_string + "1";
+            }
+
+            else if out_digit.len() == 3 {
+                out_string = out_string + "7";
+            }
+
+            else if out_digit.len() == 4 {
+                out_string = out_string + "4";
+            }
+
+            else if out_digit.len() == 7 {
+                out_string = out_string + "8";
+            }
+
+            else if out_digit.len() == 5 {
+                
+                if e.is_subset(&out_digit) {
+                    out_string = out_string + "2";
+                }
+                
+                else if b.is_subset(&out_digit) {
+                    out_string = out_string + "5";
+                }
+
+                else {
+                    out_string = out_string + "3";
+                }
+            }
+
+            else {
+                if !d.is_subset(&out_digit) {
+                    out_string = out_string + "0";
+                }
+
+                else if e.is_subset(&out_digit) {
+                    out_string = out_string + "6";
+                }
+
+                else {
+                    out_string = out_string + "9";
+                }
+            }
+        }
+
+        Ok(out_string.parse().expect("Failed to output number"))
     }
 }
 
