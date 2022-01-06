@@ -21,48 +21,50 @@ impl Line {
             .map(|num| string_to_hashset_bytes(num))
             .collect();
 
-        Line {
-            input,
-            output,
-        }
+        Line { input, output }
     }
 
     fn count_1478s(&self) -> i32 {
         self.output
             .iter()
-            .filter(|x| [2,3,4,7].contains(&x.len()))
-            .count().try_into().unwrap()
+            .filter(|x| [2, 3, 4, 7].contains(&x.len()))
+            .count()
+            .try_into()
+            .unwrap()
     }
 
-    fn decode_output(&self) -> Result<i32,Error> {
+    fn decode_output(&self) -> Result<i32, Error> {
         Ok(0)
-    } 
+    }
 }
 
 pub fn part1() -> Option<i32> {
-    Some(get_puzzle_input().unwrap().iter()
-        .map(|line| line.count_1478s())
-        .sum())
+    Some(
+        get_puzzle_input()
+            .unwrap()
+            .iter()
+            .map(|line| line.count_1478s())
+            .sum(),
+    )
 }
 
 pub fn part2() -> Option<i32> {
     let lines = get_puzzle_input().unwrap();
 
-    if lines.len() == 0 {
-        return None
+    if lines.is_empty() {
+        return None;
     }
 
-    Some(lines.iter()
-        .map(|line| line.decode_output().unwrap())
-        .sum())
+    Some(lines.iter().map(|line| line.decode_output().unwrap()).sum())
 }
 
 fn get_puzzle_input() -> Result<Vec<Line>, Error> {
     eprintln!("Getting puzzle input");
 
-    Ok(std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file")
+    Ok(std::fs::read_to_string(String::from("input.txt"))
+        .expect("Failed to open file")
         .lines()
-        .map(|line| Line::new(&line))
+        .map(|line| Line::new(line))
         .collect())
 }
 
@@ -82,23 +84,17 @@ mod tests {
 
     #[test]
     fn part1_works() {
-        let rust_result = part1();
+        let rust_result = part1().expect("No answer was returned!");
         let python_result = 521;
 
-        match rust_result {
-            Some(x) => assert_eq!(x, python_result),
-            None => panic!("No answer was returned!")
-        }
+        assert_eq!(rust_result, python_result);
     }
 
     #[test]
     fn part2_works() {
-        let rust_result = part2();
-        let python_result= 1016804;
+        let rust_result = part2().expect("No answer was returned!");
+        let python_result = 1016804;
 
-        match rust_result {
-            Some(x) => assert_eq!(x, python_result),
-            None => panic!("No answer was returned!")
-        }
+        assert_eq!(rust_result, python_result);
     }
 }
