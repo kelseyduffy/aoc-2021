@@ -101,7 +101,7 @@ impl Line {
         let d: HashSet<u8> = adg.difference(&ag).copied().collect();
         let b: HashSet<u8> = bd.difference(&d).copied().collect();
 
-        let mut out_string = String::from("");
+        let mut out_string = String::new();
 
         for out_digit in &self.output {
             if out_digit.len() == 2 {
@@ -164,13 +164,7 @@ fn get_puzzle_input() -> Result<Vec<Line>, Error> {
 }
 
 fn string_to_hashset_bytes(input: &str) -> HashSet<u8> {
-    let mut letters = HashSet::new();
-
-    for byte in input.bytes() {
-        letters.insert(byte);
-    }
-
-    letters
+    input.bytes().collect()
 }
 
 #[cfg(test)]
