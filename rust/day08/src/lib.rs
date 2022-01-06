@@ -1,16 +1,29 @@
+use std::collections::HashSet;
 use std::fmt::Error;
 
-pub struct Line <'a>{
-    input: Vec<&'a [u8]>,
-    output: Vec<&'a [u8]>,
+pub struct Line {
+    input: Vec<HashSet<u8>>,
+    output: Vec<HashSet<u8>>,
 }
 
-impl Line <'_> {
+impl Line {
     pub fn new(line: &str) -> Line {
         let (input_string, output_string) = line.trim().split_once(" | ").unwrap();
+
+        let input_parts = input_string.trim().split(' ');
+        let output_parts = output_string.trim().split(' ');
+
+        let input: Vec<HashSet<u8>> = input_parts
+            .map(|num| string_to_hashset_bytes(num))
+            .collect();
+
+        let output: Vec<HashSet<u8>> = output_parts
+            .map(|num| string_to_hashset_bytes(num))
+            .collect();
+
         Line {
-            input: input_string.trim().split(' ').map(str::as_bytes).collect(),
-            output: output_string.trim().split(' ').map(str::as_bytes).collect(),
+            input,
+            output,
         }
     }
 
@@ -41,13 +54,20 @@ pub fn part2() -> Option<i32> {
         .sum())
 }
 
-fn get_puzzle_input() -> Result<Vec<Line<'static>>, Error> {
+fn get_puzzle_input() -> Result<Vec<Line>, Error> {
     eprintln!("Getting puzzle input");
 
     Ok(std::fs::read_to_string(String::from("input.txt")).expect("Failed to open file")
         .lines()
         .map(|line| Line::new(&line))
         .collect())
+}
+
+fn string_to_hashset_bytes(input: &str) -> HashSet<u8> {
+    let mut letters = HashSet::new();
+    input.bytes().map(|byte| letters.insert(byte));
+
+    letters
 }
 
 #[cfg(test)]
