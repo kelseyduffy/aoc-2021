@@ -14,11 +14,11 @@ impl Line {
         let output_parts = output_string.trim().split(' ');
 
         let input: Vec<HashSet<u8>> = input_parts
-            .map(|num| string_to_hashset_bytes(num))
+            .map(string_to_hashset_bytes)
             .collect();
 
         let output: Vec<HashSet<u8>> = output_parts
-            .map(|num| string_to_hashset_bytes(num))
+            .map(string_to_hashset_bytes)
             .collect();
 
         Line { input, output }
@@ -28,9 +28,7 @@ impl Line {
         self.output
             .iter()
             .filter(|x| [2, 3, 4, 7].contains(&x.len()))
-            .count()
-            .try_into()
-            .unwrap()
+            .count() as i32
     }
 
     fn decode_output(&self) -> Result<i32, ()> {
@@ -159,7 +157,7 @@ fn get_puzzle_input() -> Result<Vec<Line>, Error> {
     Ok(std::fs::read_to_string(String::from("input.txt"))
         .expect("Failed to open file")
         .lines()
-        .map(|line| Line::new(line))
+        .map(Line::new)
         .collect())
 }
 
