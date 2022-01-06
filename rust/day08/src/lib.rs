@@ -28,7 +28,12 @@ impl Line {
     }
 
     fn count_1478s(&self) -> i32 {
-        0
+        println!("{}", self.output.len());
+        println!("{}", self.output[0].len());
+        self.output
+            .iter()
+            .filter(|x| [2,3,4,7].contains(&x.len()))
+            .count().try_into().unwrap()
     }
 
     fn decode_output(&self) -> Result<i32,Error> {
@@ -65,7 +70,10 @@ fn get_puzzle_input() -> Result<Vec<Line>, Error> {
 
 fn string_to_hashset_bytes(input: &str) -> HashSet<u8> {
     let mut letters = HashSet::new();
-    input.bytes().map(|byte| letters.insert(byte));
+
+    for byte in input.bytes() {
+        letters.insert(byte);
+    }
 
     letters
 }
