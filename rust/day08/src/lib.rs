@@ -53,31 +53,31 @@ impl Line {
 
         for in_digit in &self.input {
             if in_digit.len() == 2 {
-                cf.extend(&*in_digit);
+                cf.extend(in_digit);
             } else if in_digit.len() == 3 {
-                acf.extend(&*in_digit);
+                acf.extend(in_digit);
             } else if in_digit.len() == 4 {
-                bcdf.extend(&*in_digit);
+                bcdf.extend(in_digit);
             } else if in_digit.len() == 5 {
                 if five_1.is_empty() {
-                    five_1.extend(&*in_digit);
+                    five_1.extend(in_digit);
                 } else if five_2.is_empty() {
-                    five_2.extend(&*in_digit);
+                    five_2.extend(in_digit);
                 } else {
-                    five_3.extend(&*in_digit);
+                    five_3.extend(in_digit);
                 }
                 //fivers.append(&in_digit.iter().copied().collect());
             } else if in_digit.len() == 6 {
                 if six_1.is_empty() {
-                    six_1.extend(&*in_digit);
+                    six_1.extend(in_digit);
                 } else if six_2.is_empty() {
-                    six_2.extend(&*in_digit);
+                    six_2.extend(in_digit);
                 } else {
-                    six_3.extend(&*in_digit);
+                    six_3.extend(in_digit);
                 }
                 //sixers.append(&in_digit.iter().copied().collect());
             } else if in_digit.len() == 7 {
-                abcdefg.extend(&*in_digit);
+                abcdefg.extend(in_digit);
             }
         }
 
