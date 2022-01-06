@@ -28,8 +28,6 @@ impl Line {
     }
 
     fn count_1478s(&self) -> i32 {
-        println!("{}", self.output.len());
-        println!("{}", self.output[0].len());
         self.output
             .iter()
             .filter(|x| [2,3,4,7].contains(&x.len()))
