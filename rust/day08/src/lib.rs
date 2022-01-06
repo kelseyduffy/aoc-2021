@@ -27,7 +27,7 @@ impl Line {
     fn count_1478s(&self) -> i32 {
         self.output
             .iter()
-            .filter(|x| [2, 3, 4, 7].contains(&x.len()))
+            .filter(|x| matches!(x.len(), 2 | 3 | 4 | 7))
             .count() as i32
     }
 
