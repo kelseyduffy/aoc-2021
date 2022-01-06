@@ -34,105 +34,98 @@ impl Line {
     }
 
     fn decode_output(&self) -> Result<i32, ()> {
-        
         if self.input.len() != 10 {
             return Err(());
         }
 
-        let mut fivers: Vec<HashSet<u8>> = Vec::new();
-        let mut sixers: Vec<HashSet<u8>> = Vec::new();
+        //let mut fivers: Vec<HashSet<u8>> = Vec::new();
+        //let mut sixers: Vec<HashSet<u8>> = Vec::new();
+
+        let mut five_1 = HashSet::new();
+        let mut five_2 = HashSet::new();
+        let mut five_3 = HashSet::new();
+        let mut six_1 = HashSet::new();
+        let mut six_2 = HashSet::new();
+        let mut six_3 = HashSet::new();
 
         let mut cf = HashSet::new();
         let mut bcdf = HashSet::new();
         let mut acf = HashSet::new();
         let mut abcdefg = HashSet::new();
-        
-        for in_digit in self.input {
 
+        for in_digit in &self.input {
             if in_digit.len() == 2 {
-                cf.extend(&in_digit);
-            }
-
-            else if in_digit.len() == 3 {
-                acf.extend(&in_digit);
-            }
-
-            else if in_digit.len() == 4 {
-                bcdf.extend(&in_digit);
-            }
-
-            else if in_digit.len() == 5 {
-                fivers.append(&in_digit.iter().copied().collect());
-            }
-
-            else if in_digit.len() == 6 {
-                sixers.append(&in_digit.iter().copied().collect());
-            }
-
-            else if in_digit.len() == 7 {
-                abcdefg.extend(&in_digit);
+                cf.extend(&*in_digit);
+            } else if in_digit.len() == 3 {
+                acf.extend(&*in_digit);
+            } else if in_digit.len() == 4 {
+                bcdf.extend(&*in_digit);
+            } else if in_digit.len() == 5 {
+                if five_1.is_empty() {
+                    five_1.extend(&*in_digit);
+                } else if five_2.is_empty() {
+                    five_2.extend(&*in_digit);
+                } else {
+                    five_3.extend(&*in_digit);
+                }
+                //fivers.append(&in_digit.iter().copied().collect());
+            } else if in_digit.len() == 6 {
+                if six_1.is_empty() {
+                    six_1.extend(&*in_digit);
+                } else if six_2.is_empty() {
+                    six_2.extend(&*in_digit);
+                } else {
+                    six_3.extend(&*in_digit);
+                }
+                //sixers.append(&in_digit.iter().copied().collect());
+            } else if in_digit.len() == 7 {
+                abcdefg.extend(&*in_digit);
             }
         }
 
-        let adg: HashSet<_> = fivers[0].intersection(&fivers[1]).copied().collect().intersection(&fivers[2]).copied().collect();
-        let abfg: HashSet<_> = sixers[0].intersection(&sixers[1]).copied().collect().intersection(&sixers[2]).copied().collect();
-        let ag: HashSet<_> = adg.intersection(&abfg).copied().collect();
+        //let adg: HashSet<u8> = fivers[0].intersection(&fivers[1]).copied().collect().intersection(&fivers[2]).copied().collect();
+        let mut adg: HashSet<u8> = five_1.intersection(&five_2).copied().collect();
+        adg = adg.intersection(&five_3).copied().collect();
+        //let abfg: HashSet<u8> = sixers[0].intersection(&sixers[1]).copied().collect().intersection(&sixers[2]).copied().collect();
+        let mut abfg: HashSet<u8> = six_1.intersection(&six_2).copied().collect();
+        abfg = abfg.intersection(&six_3).copied().collect();
 
-        let a: HashSet<_> = acf.difference(&cf).collect();
-        let bd: HashSet<_> = bcdf.difference(&cf).collect();
-        let eg: HashSet<_> = abcdefg.difference(&bcdf).collect().difference(&a).collect();
-        let g: HashSet<_> = ag.difference(&a).collect();
-        let e: HashSet<_> = eg.difference(&g).collect();
-        let d: HashSet<_> = adg.difference(&ag).collect();
-        let b: HashSet<_> = bd.difference(&d).collect();
+        let ag: HashSet<u8> = adg.intersection(&abfg).copied().collect();
+
+        let a: HashSet<u8> = acf.difference(&cf).copied().collect();
+        let bd: HashSet<u8> = bcdf.difference(&cf).copied().collect();
+        let mut eg: HashSet<u8> = abcdefg.difference(&bcdf).copied().collect();
+        eg = eg.difference(&a).copied().collect();
+        let g: HashSet<u8> = ag.difference(&a).copied().collect();
+        let e: HashSet<u8> = eg.difference(&g).copied().collect();
+        let d: HashSet<u8> = adg.difference(&ag).copied().collect();
+        let b: HashSet<u8> = bd.difference(&d).copied().collect();
 
         let mut out_string = String::from("");
 
-        for out_digit in self.output {
-            
+        for out_digit in &self.output {
             if out_digit.len() == 2 {
-                out_string = out_string + "1";
-            }
-
-            else if out_digit.len() == 3 {
-                out_string = out_string + "7";
-            }
-
-            else if out_digit.len() == 4 {
-                out_string = out_string + "4";
-            }
-
-            else if out_digit.len() == 7 {
-                out_string = out_string + "8";
-            }
-
-            else if out_digit.len() == 5 {
-                
-                if e.is_subset(&out_digit) {
-                    out_string = out_string + "2";
+                out_string += "1";
+            } else if out_digit.len() == 3 {
+                out_string += "7";
+            } else if out_digit.len() == 4 {
+                out_string += "4";
+            } else if out_digit.len() == 7 {
+                out_string += "8";
+            } else if out_digit.len() == 5 {
+                if e.is_subset(out_digit) {
+                    out_string += "2";
+                } else if b.is_subset(out_digit) {
+                    out_string += "5";
+                } else {
+                    out_string += "3";
                 }
-                
-                else if b.is_subset(&out_digit) {
-                    out_string = out_string + "5";
-                }
-
-                else {
-                    out_string = out_string + "3";
-                }
-            }
-
-            else {
-                if !d.is_subset(&out_digit) {
-                    out_string = out_string + "0";
-                }
-
-                else if e.is_subset(&out_digit) {
-                    out_string = out_string + "6";
-                }
-
-                else {
-                    out_string = out_string + "9";
-                }
+            } else if !d.is_subset(out_digit) {
+                out_string += "0";
+            } else if e.is_subset(out_digit) {
+                out_string += "6";
+            } else {
+                out_string += "9";
             }
         }
 
