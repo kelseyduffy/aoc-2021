@@ -18,4 +18,4 @@ Rust for learning
 |[10 - syntax](python/10.py)|3306|2974|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day10.yml)|[23 - amphipods](python/23.py)|__665__|4577|--|
 |[11 - octo flashes](python/11.py)|2137|2046|--|[24 - assembly](python/24.py)|4702|4561|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml)|
 |[12 - spelunking](python/12.py)|23038|22041|--|[__25__ - cucumbers](python/25.py)|__999__|__818__|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml)|
-|[13 - folding](python/13.py)|34066|33340|--|~~|~~|~~|~~|
+|[13 - folding](python/13.py)|34066|33340|[![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day13.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day13.yml)|~~|~~|~~|~~|
