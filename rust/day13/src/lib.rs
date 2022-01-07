@@ -57,7 +57,6 @@ fn get_puzzle_input() -> Result<(Vec<Point>, Vec<Fold>), Error> {
         .next()
         .unwrap()
         .lines()
-        .filter(|x| x.len() > 0)
         .map(Point::new)
         .collect();
 
