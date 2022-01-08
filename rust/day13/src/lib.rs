@@ -1,4 +1,3 @@
-use std::cmp::max;
 use std::collections::HashSet;
 use std::fmt::Error;
 
@@ -41,21 +40,33 @@ pub fn fold_point(point: &Point, folds: &Vec<Fold>) -> (u32, u32) {
     let (mut x, mut y) = (point.x, point.y);
 
     folds.iter().for_each(|fold| match fold {
-            Fold::X(val) if val < &x => x = 2 * val - x,
-            Fold::Y(val) if val < &y => y = 2 * val - y,
-            _ => (),
-        });
-    
-    (x,y)
+        Fold::X(val) if val < &x => x = 2 * val - x,
+        Fold::Y(val) if val < &y => y = 2 * val - y,
+        _ => (),
+    });
+
+    (x, y)
+}
+
+pub fn single_fold_point(point: &Point, fold: &Fold) -> (u32, u32) {
+    let (mut x, mut y) = (point.x, point.y);
+
+    match fold {
+        Fold::X(val) if val < &x => x = 2 * val - x,
+        Fold::Y(val) if val < &y => y = 2 * val - y,
+        _ => (),
+    };
+
+    (x, y)
 }
 
 pub fn part1() -> Option<u32> {
-    
     let (points, folds) = get_puzzle_input().unwrap();
-    
-    let set: HashSet<(u32,u32)> = points
+
+    let set: HashSet<(u32, u32)> = points
         .iter()
-        .map(|point| fold_point(&point, &folds))
+        //.map(|point| fold_point(&point, &folds[..1].copied().to_vec()))
+        .map(|point| single_fold_point(&point, &folds[0]))
         .collect();
 
     Some(set.len() as u32)
@@ -63,8 +74,8 @@ pub fn part1() -> Option<u32> {
 
 pub fn part2() -> Option<String> {
     let (points, folds) = get_puzzle_input().unwrap();
-    
-    let set: HashSet<(u32,u32)> = points
+
+    let set: HashSet<(u32, u32)> = points
         .iter()
         .map(|point| fold_point(&point, &folds))
         .collect();
@@ -72,15 +83,14 @@ pub fn part2() -> Option<String> {
     let mut answer = String::new();
     answer += "\n";
 
-    let max_x = set.iter().map(|&(x,_)| x).max().unwrap();
-    let max_y = set.iter().map(|&(_,y)| y).max().unwrap();
+    let max_x = set.iter().map(|&(x, _)| x).max().unwrap();
+    let max_y = set.iter().map(|&(_, y)| y).max().unwrap();
 
-    for y in 0..max_y+1 {
-        for x in 0..max_x+1 {
-            match set.contains(&(x,y)) {
+    for y in 0..max_y + 1 {
+        for x in 0..max_x + 1 {
+            match set.contains(&(x, y)) {
                 true => answer += "#",
                 false => answer += " ",
-                _ => unreachable!(),
             };
         }
         answer += "\n";
@@ -95,12 +105,7 @@ fn get_puzzle_input() -> Result<(Vec<Point>, Vec<Fold>), Error> {
 
     let mut file_iter = file_contents.split("\n\n");
 
-    let points: Vec<Point> = file_iter
-        .next()
-        .unwrap()
-        .lines()
-        .map(Point::new)
-        .collect();
+    let points: Vec<Point> = file_iter.next().unwrap().lines().map(Point::new).collect();
 
     let folds: Vec<Fold> = file_iter.next().unwrap().lines().map(Fold::new).collect();
 
