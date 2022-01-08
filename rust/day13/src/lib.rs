@@ -1,3 +1,5 @@
+use std::cmp::max;
+use std::collections::HashSet;
 use std::fmt::Error;
 
 pub struct Point {
@@ -35,16 +37,56 @@ impl Fold {
     }
 }
 
-pub fn part1() -> Option<u32> {
-    let (points, folds) = get_puzzle_input().unwrap();
+pub fn fold_point(point: &Point, folds: &Vec<Fold>) -> (u32, u32) {
+    let (mut x, mut y) = (point.x, point.y);
 
-    Some(0)
+    folds.iter().for_each(|fold| match fold {
+            Fold::X(val) if val < &x => x = 2 * val - x,
+            Fold::Y(val) if val < &y => y = 2 * val - y,
+            _ => (),
+        });
+    
+    (x,y)
+}
+
+pub fn part1() -> Option<u32> {
+    
+    let (points, folds) = get_puzzle_input().unwrap();
+    
+    let set: HashSet<(u32,u32)> = points
+        .iter()
+        .map(|point| fold_point(&point, &folds))
+        .collect();
+
+    Some(set.len() as u32)
 }
 
 pub fn part2() -> Option<String> {
     let (points, folds) = get_puzzle_input().unwrap();
+    
+    let set: HashSet<(u32,u32)> = points
+        .iter()
+        .map(|point| fold_point(&point, &folds))
+        .collect();
 
-    Some(String::new())
+    let mut answer = String::new();
+    answer += "\n";
+
+    let max_x = set.iter().map(|&(x,_)| x).max().unwrap();
+    let max_y = set.iter().map(|&(_,y)| y).max().unwrap();
+
+    for y in 0..max_y+1 {
+        for x in 0..max_x+1 {
+            match set.contains(&(x,y)) {
+                true => answer += "#",
+                false => answer += " ",
+                _ => unreachable!(),
+            };
+        }
+        answer += "\n";
+    }
+
+    Some(answer)
 }
 
 fn get_puzzle_input() -> Result<(Vec<Point>, Vec<Fold>), Error> {
@@ -81,11 +123,11 @@ mod tests {
     fn part2_works() {
         let rust_result = part2().expect("No answer was returned!");
         let python_result = "
-###  ###   ##  #  # #### ###  #    ###
+###  ###   ##  #  # #### ###  #    ### 
 #  # #  # #  # # #  #    #  # #    #  #
 #  # #  # #    ##   ###  ###  #    #  #
-###  ###  #    # #  #    #  # #    ###
-# #  #    #  # # #  #    #  # #    # #
+###  ###  #    # #  #    #  # #    ### 
+# #  #    #  # # #  #    #  # #    # # 
 #  # #     ##  #  # #    ###  #### #  #
 ";
 
