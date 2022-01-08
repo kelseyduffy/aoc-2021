@@ -92,11 +92,10 @@ fn get_puzzle_input() -> Result<(Vec<Point>, Vec<Fold>), Error> {
 
     let mut file_iter = file_contents.split("\n\n");
 
-    let points: Vec<Point> = file_iter.next().unwrap().lines().map(Point::new).collect();
-
-    let folds: Vec<Fold> = file_iter.next().unwrap().lines().map(Fold::new).collect();
-
-    Ok((points, folds))
+    Ok((
+        file_iter.next().unwrap().lines().map(Point::new).collect(),
+        file_iter.next().unwrap().lines().map(Fold::new).collect(),
+    ))
 }
 
 #[cfg(test)]
