@@ -36,7 +36,7 @@ impl Fold {
     }
 }
 
-pub fn fold_point(point: &Point, folds: &Vec<Fold>) -> (u32, u32) {
+pub fn fold_point(point: &Point, folds: &[Fold]) -> (u32, u32) {
     let (mut x, mut y) = (point.x, point.y);
 
     folds.iter().for_each(|fold| match fold {
@@ -48,25 +48,12 @@ pub fn fold_point(point: &Point, folds: &Vec<Fold>) -> (u32, u32) {
     (x, y)
 }
 
-pub fn single_fold_point(point: &Point, fold: &Fold) -> (u32, u32) {
-    let (mut x, mut y) = (point.x, point.y);
-
-    match fold {
-        Fold::X(val) if val < &x => x = 2 * val - x,
-        Fold::Y(val) if val < &y => y = 2 * val - y,
-        _ => (),
-    };
-
-    (x, y)
-}
-
 pub fn part1() -> Option<u32> {
     let (points, folds) = get_puzzle_input().unwrap();
 
     let set: HashSet<(u32, u32)> = points
         .iter()
-        //.map(|point| fold_point(&point, &folds[..1].copied().to_vec()))
-        .map(|point| single_fold_point(&point, &folds[0]))
+        .map(|point| fold_point(point, &folds[..1]))
         .collect();
 
     Some(set.len() as u32)
@@ -77,7 +64,7 @@ pub fn part2() -> Option<String> {
 
     let set: HashSet<(u32, u32)> = points
         .iter()
-        .map(|point| fold_point(&point, &folds))
+        .map(|point| fold_point(point, &folds))
         .collect();
 
     let mut answer = String::new();
