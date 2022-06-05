@@ -19,15 +19,15 @@ Rust for learning
 |[11](https://adventofcode.com/2021/day/11)|octo flashes|2137|2046|[python](python/11.py)|--|--|--|
 |[12](https://adventofcode.com/2021/day/12)|spelunking|23038|22041|[python](python/12.py)|--|--|--|
 |[13](https://adventofcode.com/2021/day/13)|folding|34066|33340|[python](python/13.py)|[rust](rust/day13/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day13.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day13.yml)|--|--|
-|[14](https://adventofcode.com/2021/day/14)|polymers|4874|20470|[python](python/14.py)--|--|--|
-|[15](https://adventofcode.com/2021/day/15)|chiton|18353|17707|[python](python/15.py)--|--|--|
-|[16](https://adventofcode.com/2021/day/16)|protocol|18879|17142|[python](python/16.py)--|--|--|
+|[14](https://adventofcode.com/2021/day/14)|polymers|4874|20470|[python](python/14.py)|--|--|--|
+|[15](https://adventofcode.com/2021/day/15)|chiton|18353|17707|[python](python/15.py)|--|--|--|
+|[16](https://adventofcode.com/2021/day/16)|protocol|18879|17142|[python](python/16.py)|--|--|--|
 |[17](https://adventofcode.com/2021/day/17)|kinetics|14200|16017|[python](python/17.py)|[rust](rust/day17/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day17.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day17.yml)|--|--|
-|[18](https://adventofcode.com/2021/day/18)|snailfish|13493|13295|[python](python/18.py)--|--|--|
-|[19](https://adventofcode.com/2021/day/19)|rotations|8192|7945|[python](python/19.py)--|--|--|
-|[20](https://adventofcode.com/2021/day/20)|trenches|13882|13530|[python](python/20.py)--|--|--|
-|[21](https://adventofcode.com/2021/day/21)|multiverse|13182|11044|[python](python/21.py)--|--|--|
-|[22](https://adventofcode.com/2021/day/22)|cubes|1248|6022|[python](python/22.py)--|--|--|
-|[23](https://adventofcode.com/2021/day/23)|amphipods|__665__|4577|[python](python/23.py)--|--|--|
+|[18](https://adventofcode.com/2021/day/18)|snailfish|13493|13295|[python](python/18.py)|--|--|--|
+|[19](https://adventofcode.com/2021/day/19)|rotations|8192|7945|[python](python/19.py)|--|--|--|
+|[20](https://adventofcode.com/2021/day/20)|trenches|13882|13530|[python](python/20.py)|--|--|--|
+|[21](https://adventofcode.com/2021/day/21)|multiverse|13182|11044|[python](python/21.py)|--|--|--|
+|[22](https://adventofcode.com/2021/day/22)|cubes|1248|6022|[python](python/22.py)|--|--|--|
+|[23](https://adventofcode.com/2021/day/23)|amphipods|__665__|4577|[python](python/23.py)|--|--|--|
 |[24](https://adventofcode.com/2021/day/24)|assembly|4702|4561|[python](python/24.py)|[rust](rust/day24/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml)|--|--|
 |[__25__](https://adventofcode.com/2021/day/25)|cucumbers|__999__|__818__|[python](python/25.py)|[rust](rust/day25/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day25.yml)|--|--|
