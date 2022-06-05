@@ -6,11 +6,11 @@ Rust for learning
 
 | Day | Topic | Part 1 | Part 2 | Python | Rust | Go | Comments |
 |:---:|:---:|---:|---:|:---|:---|:---|:---|
-|[01](https://adventofcode.com/2021/day/1)|sonar|1351|2583|[python](python/01.py)|[rust](rust/day01/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|--|--|
+|[01](https://adventofcode.com/2021/day/1)|sonar|1351|2583|[python](python/01.py)|[rust](rust/day01/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|[go](go/day01/day01.go) [![Go](https://github.com/kelseyduffy/aoc-2021/actions/workflows/go_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/go_day01.yml)|--|
 |[02](https://adventofcode.com/2021/day/2)|diving|__292__|1320|[python](python/02.py)|[rust](rust/day02/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml)|--|--|
 |[03](https://adventofcode.com/2021/day/3)|binary|55599|49244|[python](python/03.py)|--|--|--|
 |[04](https://adventofcode.com/2021/day/4)|squid bingo|1665|2280|[python](python/04.py)|--|--|--|
-|[05](https://adventofcode.com/2021/day/5)|hydro vents|38916|36070|[python](python/05.py)|[rust](rust/day05/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day05.yml)|--|--|
+|[05](https://adventofcode.com/2021/day/5)|hydro vents|38916|36070|[python](python/05.py)|[rust](rust/day05/src/lib.rs)|--|--|
 |[06](https://adventofcode.com/2021/day/6)|lanternfish|__333__|7849|[python](python/06.py)|[rust](rust/day06/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day06.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day06.yml)|--|memory management|
 |[07](https://adventofcode.com/2021/day/7)|crab subs|39518|37296|[python](python/07.py)|[rust](rust/day07/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day07.yml)|--|--|
 |[08](https://adventofcode.com/2021/day/8)|crypto|1878|22657|[python](python/08.py)|[rust](rust/day08/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day08.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day08.yml)|--|set operations|
