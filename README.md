@@ -6,7 +6,7 @@ Rust for learning
 
 | Day | Topic | Part 1 | Part 2 | Python | Rust | Go | Comments |
 |:---:|:---:|---:|---:|:---|:---|:---|:---|
-|[01](https://adventofcode.com/2021/day/1)|sonar|1351|2583|[python]((python/01.py))|[rust](rust/day01/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|--|--|
+|[01](https://adventofcode.com/2021/day/1)|sonar|1351|2583|[python](python/01.py)|[rust](rust/day01/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day01.yml)|--|--|
 |[02](https://adventofcode.com/2021/day/2)|diving|__292__|1320|[python](python/02.py)|[rust](rust/day02/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day02.yml)|--|--|
 |[03](https://adventofcode.com/2021/day/3)|binary|55599|49244|[python](python/03.py)|--|--|--|
 |[04](https://adventofcode.com/2021/day/4)|squid bingo|1665|2280|[python](python/04.py)|--|--|--|
