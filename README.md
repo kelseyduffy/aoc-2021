@@ -1,7 +1,7 @@
 [advent of code 2021](https://adventofcode.com/)
 
 Python for speed  
-Rust for learning  
+Rust and Go for learning  
 
 
 | Day | Topic | Part 1 | Part 2 | Python | Rust | Go | Comments |
