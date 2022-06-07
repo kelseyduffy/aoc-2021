@@ -26,7 +26,7 @@ Rust and Go for learning
 |[18](https://adventofcode.com/2021/day/18)|snailfish|13493|13295|[python](python/18.py)|--|--|tedious text parsing|
 |[19](https://adventofcode.com/2021/day/19)|rotations|8192|7945|[python](python/19.py)|--|--|sets, linear alg|
 |[20](https://adventofcode.com/2021/day/20)|trenches|13882|13530|[python](python/20.py)|--|--|--|
-|[21](https://adventofcode.com/2021/day/21)|multiverse|13182|11044|[python](python/21.py)|--|--|memoization|
+|[21](https://adventofcode.com/2021/day/21)|multiverse|13182|11044|[python](python/21.py)|--|[go](go/day21/day21.go) [![Go](https://github.com/kelseyduffy/aoc-2021/actions/workflows/go_day21.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/go_day21.yml)|memoization|
 |[22](https://adventofcode.com/2021/day/22)|cubes|1248|6022|[python](python/22.py)|--|--|3d overlaps|
 |[23](https://adventofcode.com/2021/day/23)|amphipods|__665__|4577|[python](python/23.py)|--|--|path finding|
 |[24](https://adventofcode.com/2021/day/24)|assembly|4702|4561|[python](python/24.py)|[rust](rust/day24/src/lib.rs) [![Rust](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml/badge.svg)](https://github.com/kelseyduffy/aoc-2021/actions/workflows/rust_day24.yml)|--|disassembly|
