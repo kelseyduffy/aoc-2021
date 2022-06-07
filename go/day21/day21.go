@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type player struct {
@@ -19,27 +20,40 @@ type gameState struct {
 	turn int
 }
 
-type outcomes [2]int
+type entry struct {
+	res [2]int
+	ready chan struct{}
+}
 
-type simFunc func(state gameState, mem *memoizer) (outcomes)
+type simFunc func(state gameState, mem *memoizer) ([2]int)
 
 type memoizer struct {
 	f simFunc
-	cache map[gameState]outcomes
+	mu sync.Mutex
+	cache map[gameState]*entry
 }
 
 func New(f simFunc) *memoizer {
-	return &memoizer{f: f, cache: make(map[gameState]outcomes)}
+	return &memoizer{f: f, cache: make(map[gameState]*entry)}
 }
 
-func Get(state gameState, mem *memoizer) (outcomes) {
-	res, ok := mem.cache[state]
-	if !ok {
-		res = mem.f(state, mem)
-		mem.cache[state] = res
-	}
+func Get(state gameState, mem *memoizer) ([2]int) {
+	mem.mu.Lock()
+	e := mem.cache[state]
+	if e == nil {
+		e = &entry{ready: make(chan struct{})}
+		mem.cache[state] = e
+		mem.mu.Unlock()
 
-	return res
+		e.res = mem.f(state, mem)
+
+		close(e.ready)
+	} else {
+		mem.mu.Unlock()
+
+		<-e.ready
+	}
+	return e.res
 }
 
 func main() {
@@ -124,11 +138,16 @@ func part2(starting [2]int) (int, error) {
 
 	outcome := Get(startingState, m)
 
-	return outcome.Max(), nil
+	if outcome[0] > outcome[1] {
+		return outcome[0], nil
+	} else {
+		return outcome[1], nil
+	}
 }
 
-func simulate(state gameState, mem *memoizer) (outcomes) {
-	var outcome outcomes = [2]int{0,0}
+func simulate(state gameState, mem *memoizer) ([2]int) {
+	outcome := [2]int{0,0}
+	var n sync.WaitGroup
 
 	for r1:= 1; r1 < 4; r1++ {
 		for r2:= 1; r2 < 4; r2++ {
@@ -145,20 +164,19 @@ func simulate(state gameState, mem *memoizer) (outcomes) {
 					nextState.players[state.turn].score = newScore
 					nextState.players[nextTurn].tile = state.players[nextTurn].tile
 					nextState.players[nextTurn].score = state.players[nextTurn].score
-					nextOutcomes := Get(nextState, mem)
-					outcome[0] += nextOutcomes[0]
-					outcome[1] += nextOutcomes[1]
+					
+					n.Add(1)
+					go func(nextState gameState, mem *memoizer, outcome []int) {
+						defer n.Done()
+						nextOutcomes :=  Get(nextState, mem)
+						outcome[0] += nextOutcomes[0]
+						outcome[1] += nextOutcomes[1]
+					}(nextState, mem, outcome[:])
 				}
 			}
 		}
 	}
+	n.Wait()
 
 	return outcome
-}
-func (res outcomes) Max() int {
-	if res[0] > res[1] {
-		return res[0]
-	} else {
-		return res[1]
-	}
 }
