@@ -33,7 +33,7 @@ func New(f simFunc) *memoizer {
 	return &memoizer{f: f, cache: make(map[gameState]outcomes)}
 }
 
-func NonConcurrentGet(state gameState, mem *memoizer) (outcomes) {
+func Get(state gameState, mem *memoizer) (outcomes) {
 	res, ok := mem.cache[state]
 	if !ok {
 		res = mem.f(state, mem)
@@ -60,12 +60,6 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(part2_ans)
-
-	part2C_ans, err := part2Concurrent(starting)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(part2C_ans)
 }
 
 func parse_input() ([2]int, error) {
@@ -141,21 +135,17 @@ func part2(starting [2]int) (int, error) {
 
 	startingState := gameState{starting[0], 0, starting[1], 0, true}
 
-	outcome := NonConcurrentGet(startingState, m)
+	outcome := Get(startingState, m)
 
 	return outcome.Max(), nil
-}
-
-func part2Concurrent(starting [2]int) (int, error) {
-	return 0, nil
 }
 
 func simulate(state gameState, mem *memoizer) (outcomes) {
 	var outcome = outcomes{0,0} 
 
-	for r1:=0; r1 < 4; r1++ {
-		for r2:=0; r2 < 4; r2++ {
-			for r3:=0; r3 < 4; r3++ {
+	for r1:= 1; r1 < 4; r1++ {
+		for r2:= 1; r2 < 4; r2++ {
+			for r3:= 1; r3 < 4; r3++ {
 				if state.player1Turn {
 					newP1Tile := state.player1Tile + r1 + r2 + r3
 					newP1Tile = ((newP1Tile - 1) % 10) + 1
@@ -164,7 +154,7 @@ func simulate(state gameState, mem *memoizer) (outcomes) {
 						outcome.player1Wins += 1
 					} else {
 						nextState := gameState{newP1Tile, newP1Score, state.player2Tile, state.player2Score, false}
-						nextOutcomes := NonConcurrentGet(nextState, mem)
+						nextOutcomes := Get(nextState, mem)
 						outcome.player1Wins += nextOutcomes.player1Wins
 						outcome.player2Wins += nextOutcomes.player2Wins
 					}
@@ -176,7 +166,7 @@ func simulate(state gameState, mem *memoizer) (outcomes) {
 						outcome.player2Wins += 1
 					} else {
 						nextState := gameState{state.player1Tile, state.player1Score, newP2Tile, newP2Score, true}
-						nextOutcomes := NonConcurrentGet(nextState, mem)
+						nextOutcomes := Get(nextState, mem)
 						outcome.player1Wins += nextOutcomes.player1Wins
 						outcome.player2Wins += nextOutcomes.player2Wins
 					}
