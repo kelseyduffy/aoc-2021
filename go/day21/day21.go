@@ -9,18 +9,17 @@ import (
 	"strings"
 )
 
-type gameState struct {
-	player1Tile  int
-	player1Score int
-	player2Tile  int
-	player2Score int
-	player1Turn  bool
+type player struct {
+	tile int
+	score int
 }
 
-type outcomes struct {
-	player1Wins int
-	player2Wins int
+type gameState struct {
+	players [2]player
+	turn int
 }
+
+type outcomes [2]int
 
 type simFunc func(state gameState, mem *memoizer) (outcomes)
 
@@ -100,40 +99,28 @@ func parse_input() ([2]int, error) {
 
 func part1(starting [2]int) (int, error) {
 	winningScore := 1000
-	var game gameState = gameState{starting[0], 0, starting[1], 0, true}
+	var game gameState = gameState{[2]player{player{starting[0], 0}, player{starting[1], 0}}, 0}
 	die := 0
 
-	for game.player1Score < winningScore && game.player2Score < winningScore {
-		if game.player1Turn {
-			for count := 0; count < 3; count++ {
-				die++
-				game.player1Tile += (die - 1%100) + 1
-			}
-			game.player1Tile = ((game.player1Tile - 1) % 10) + 1
-			game.player1Score += game.player1Tile
-			game.player1Turn = false
-		} else {
-			for count := 0; count < 3; count++ {
-				die++
-				game.player2Tile += (die - 1%100) + 1
-			}
-			game.player2Tile = ((game.player2Tile - 1) % 10) + 1
-			game.player2Score += game.player2Tile
-			game.player1Turn = true
+	for game.players[0].score < winningScore && game.players[1].score < winningScore {
+		for count := 0; count < 3; count++ {
+			die++
+			game.players[game.turn].tile += (die - 1%100) + 1
 		}
+		game.players[game.turn].tile = ((game.players[game.turn].tile - 1) % 10) + 1
+		game.players[game.turn].score += game.players[game.turn].tile
+		game.turn += 1
+		game.turn %= 2
 	}
-	if game.player1Turn {
-		return game.player1Score * die, nil
-	} else {
-		return game.player2Score * die, nil
-	}
+
+	return game.players[game.turn].score * die, nil
 }
 
 func part2(starting [2]int) (int, error) {
 	
 	m := New(simulate)
 
-	startingState := gameState{starting[0], 0, starting[1], 0, true}
+	startingState := gameState{[2]player{player{starting[0], 0}, player{starting[1], 0}}, 0}
 
 	outcome := Get(startingState, m)
 
@@ -141,35 +128,26 @@ func part2(starting [2]int) (int, error) {
 }
 
 func simulate(state gameState, mem *memoizer) (outcomes) {
-	var outcome = outcomes{0,0} 
+	var outcome outcomes = [2]int{0,0}
 
 	for r1:= 1; r1 < 4; r1++ {
 		for r2:= 1; r2 < 4; r2++ {
 			for r3:= 1; r3 < 4; r3++ {
-				if state.player1Turn {
-					newP1Tile := state.player1Tile + r1 + r2 + r3
-					newP1Tile = ((newP1Tile - 1) % 10) + 1
-					newP1Score := state.player1Score + newP1Tile
-					if newP1Score >= 21 {
-						outcome.player1Wins += 1
-					} else {
-						nextState := gameState{newP1Tile, newP1Score, state.player2Tile, state.player2Score, false}
-						nextOutcomes := Get(nextState, mem)
-						outcome.player1Wins += nextOutcomes.player1Wins
-						outcome.player2Wins += nextOutcomes.player2Wins
-					}
+				newTile := state.players[state.turn].tile + r1 + r2 + r3
+				newTile = ((newTile - 1) % 10) + 1
+				newScore := state.players[state.turn].score + newTile
+				if newScore >= 21 {
+					outcome[state.turn] += 1
 				} else {
-					newP2Tile := state.player2Tile + r1 + r2 + r3
-					newP2Tile = ((newP2Tile - 1) % 10) + 1
-					newP2Score := state.player2Score + newP2Tile
-					if newP2Score >= 21 {
-						outcome.player2Wins += 1
-					} else {
-						nextState := gameState{state.player1Tile, state.player1Score, newP2Tile, newP2Score, true}
-						nextOutcomes := Get(nextState, mem)
-						outcome.player1Wins += nextOutcomes.player1Wins
-						outcome.player2Wins += nextOutcomes.player2Wins
-					}
+					nextTurn := (state.turn + 1) % 2
+					nextState := gameState{[2]player{player{0, 0}, player{0, 0}}, nextTurn}
+					nextState.players[state.turn].tile = newTile
+					nextState.players[state.turn].score = newScore
+					nextState.players[nextTurn].tile = state.players[nextTurn].tile
+					nextState.players[nextTurn].score = state.players[nextTurn].score
+					nextOutcomes := Get(nextState, mem)
+					outcome[0] += nextOutcomes[0]
+					outcome[1] += nextOutcomes[1]
 				}
 			}
 		}
@@ -178,9 +156,9 @@ func simulate(state gameState, mem *memoizer) (outcomes) {
 	return outcome
 }
 func (res outcomes) Max() int {
-	if res.player1Wins > res.player2Wins {
-		return res.player1Wins
+	if res[0] > res[1] {
+		return res[0]
 	} else {
-		return res.player2Wins
+		return res[1]
 	}
 }
