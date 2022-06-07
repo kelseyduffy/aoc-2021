@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 type player struct {
@@ -20,40 +19,25 @@ type gameState struct {
 	turn int
 }
 
-type entry struct {
-	res [2]int
-	ready chan struct{}
-}
-
 type simFunc func(state gameState, mem *memoizer) ([2]int)
 
 type memoizer struct {
 	f simFunc
-	mu sync.Mutex
-	cache map[gameState]*entry
+	cache map[gameState][2]int
 }
 
 func New(f simFunc) *memoizer {
-	return &memoizer{f: f, cache: make(map[gameState]*entry)}
+	return &memoizer{f: f, cache: make(map[gameState][2]int)}
 }
 
 func Get(state gameState, mem *memoizer) ([2]int) {
-	mem.mu.Lock()
-	e := mem.cache[state]
-	if e == nil {
-		e = &entry{ready: make(chan struct{})}
-		mem.cache[state] = e
-		mem.mu.Unlock()
-
-		e.res = mem.f(state, mem)
-
-		close(e.ready)
-	} else {
-		mem.mu.Unlock()
-
-		<-e.ready
+	res, ok := mem.cache[state]
+	if !ok {
+		res = mem.f(state, mem)
+		mem.cache[state] = res
 	}
-	return e.res
+
+	return res
 }
 
 func main() {
@@ -147,7 +131,6 @@ func part2(starting [2]int) (int, error) {
 
 func simulate(state gameState, mem *memoizer) ([2]int) {
 	outcome := [2]int{0,0}
-	var n sync.WaitGroup
 
 	for r1:= 1; r1 < 4; r1++ {
 		for r2:= 1; r2 < 4; r2++ {
@@ -164,19 +147,13 @@ func simulate(state gameState, mem *memoizer) ([2]int) {
 					nextState.players[state.turn].score = newScore
 					nextState.players[nextTurn].tile = state.players[nextTurn].tile
 					nextState.players[nextTurn].score = state.players[nextTurn].score
-					
-					n.Add(1)
-					go func(nextState gameState, mem *memoizer, outcome []int) {
-						defer n.Done()
-						nextOutcomes :=  Get(nextState, mem)
-						outcome[0] += nextOutcomes[0]
-						outcome[1] += nextOutcomes[1]
-					}(nextState, mem, outcome[:])
+					nextOutcomes := Get(nextState, mem)
+					outcome[0] += nextOutcomes[0]
+					outcome[1] += nextOutcomes[1]
 				}
 			}
 		}
 	}
-	n.Wait()
 
 	return outcome
 }
