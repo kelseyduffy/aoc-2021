@@ -169,14 +169,14 @@ func simulate(state gameState, mem *memoizer) ([2]int) {
 					nextState.players[nextTurn].score = state.players[nextTurn].score
 					
 					n.Add(1)
-					go func(nextState gameState, mem *memoizer, outcome []int) {
+					go func(nextState gameState) {
 						defer n.Done()
 						nextOutcomes :=  Get(nextState, mem)
 						localMu.Lock()
 						outcome[0] += nextOutcomes[0]
 						outcome[1] += nextOutcomes[1]
 						localMu.Unlock()
-					}(nextState, mem, outcome[:])
+					}(nextState)
 				}
 			}
 		}
