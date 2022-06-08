@@ -148,6 +148,7 @@ func part2(starting [2]int) (int, error) {
 func simulate(state gameState, mem *memoizer) ([2]int) {
 	outcome := [2]int{0,0}
 	var n sync.WaitGroup
+	var localMu sync.Mutex
 
 	for r1:= 1; r1 < 4; r1++ {
 		for r2:= 1; r2 < 4; r2++ {
@@ -156,7 +157,9 @@ func simulate(state gameState, mem *memoizer) ([2]int) {
 				newTile = ((newTile - 1) % 10) + 1
 				newScore := state.players[state.turn].score + newTile
 				if newScore >= 21 {
+					localMu.Lock()
 					outcome[state.turn] += 1
+					localMu.Unlock()
 				} else {
 					nextTurn := (state.turn + 1) % 2
 					nextState := gameState{[2]player{player{0, 0}, player{0, 0}}, nextTurn}
@@ -169,8 +172,10 @@ func simulate(state gameState, mem *memoizer) ([2]int) {
 					go func(nextState gameState, mem *memoizer, outcome []int) {
 						defer n.Done()
 						nextOutcomes :=  Get(nextState, mem)
+						localMu.Lock()
 						outcome[0] += nextOutcomes[0]
 						outcome[1] += nextOutcomes[1]
+						localMu.Unlock()
 					}(nextState, mem, outcome[:])
 				}
 			}
