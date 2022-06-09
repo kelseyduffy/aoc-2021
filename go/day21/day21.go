@@ -10,19 +10,19 @@ import (
 )
 
 type player struct {
-	tile int
+	tile  int
 	score int
 }
 
 type gameState struct {
 	players [2]player
-	turn int
+	turn    int
 }
 
-type simFunc func(state gameState, mem *memoizer) ([2]int)
+type simFunc func(state gameState, mem *memoizer) [2]int
 
 type memoizer struct {
-	f simFunc
+	f     simFunc
 	cache map[gameState][2]int
 }
 
@@ -30,7 +30,7 @@ func New(f simFunc) *memoizer {
 	return &memoizer{f: f, cache: make(map[gameState][2]int)}
 }
 
-func Get(state gameState, mem *memoizer) ([2]int) {
+func Get(state gameState, mem *memoizer) [2]int {
 	res, ok := mem.cache[state]
 	if !ok {
 		res = mem.f(state, mem)
@@ -97,7 +97,7 @@ func parse_input() ([2]int, error) {
 
 func part1(starting [2]int) (int, error) {
 	winningScore := 1000
-	var game gameState = gameState{[2]player{player{starting[0], 0}, player{starting[1], 0}}, 0}
+	var game gameState = gameState{[2]player{{starting[0], 0}, {starting[1], 0}}, 0}
 	die := 0
 
 	for game.players[0].score < winningScore && game.players[1].score < winningScore {
@@ -115,10 +115,10 @@ func part1(starting [2]int) (int, error) {
 }
 
 func part2(starting [2]int) (int, error) {
-	
+
 	m := New(simulate)
 
-	startingState := gameState{[2]player{player{starting[0], 0}, player{starting[1], 0}}, 0}
+	startingState := gameState{[2]player{{starting[0], 0}, {starting[1], 0}}, 0}
 
 	outcome := Get(startingState, m)
 
@@ -129,12 +129,12 @@ func part2(starting [2]int) (int, error) {
 	}
 }
 
-func simulate(state gameState, mem *memoizer) ([2]int) {
-	outcome := [2]int{0,0}
+func simulate(state gameState, mem *memoizer) [2]int {
+	outcome := [2]int{0, 0}
 
-	for r1:= 1; r1 < 4; r1++ {
-		for r2:= 1; r2 < 4; r2++ {
-			for r3:= 1; r3 < 4; r3++ {
+	for r1 := 1; r1 < 4; r1++ {
+		for r2 := 1; r2 < 4; r2++ {
+			for r3 := 1; r3 < 4; r3++ {
 				newTile := state.players[state.turn].tile + r1 + r2 + r3
 				newTile = ((newTile - 1) % 10) + 1
 				newScore := state.players[state.turn].score + newTile
@@ -142,7 +142,7 @@ func simulate(state gameState, mem *memoizer) ([2]int) {
 					outcome[state.turn] += 1
 				} else {
 					nextTurn := (state.turn + 1) % 2
-					nextState := gameState{[2]player{player{0, 0}, player{0, 0}}, nextTurn}
+					nextState := gameState{[2]player{{0, 0}, {0, 0}}, nextTurn}
 					nextState.players[state.turn].tile = newTile
 					nextState.players[state.turn].score = newScore
 					nextState.players[nextTurn].tile = state.players[nextTurn].tile
